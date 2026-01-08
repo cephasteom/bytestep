@@ -2,16 +2,23 @@
     const rows = 24;
     const cols = 32;
 
+    let currentRow = 2;
+
     const cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
 </script>
 
-<section class="sequencer">
+<section 
+    class="sequencer"   
+    role="application"
+    on:mouseleave={() => currentRow = -1}
+>
     <div class="sequencer__piano">
         {#each Array(rows) as _, rowIndex}
             <div 
                 class="sequencer__piano-key" 
                 style="grid-row: {rowIndex + 1};"
                 class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (rowIndex % 12) - 1)}
+                class:sequencer__piano-key--active={rowIndex === currentRow}
             ></div>
         {/each}
     </div>
@@ -25,12 +32,11 @@
                     style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};}"
                     class:sequencer__cell--highlighted={!(Math.floor(colIndex / 4) % 2)}
                     class:sequencer__cell--active={cells[rowIndex][colIndex]}
-                    on:click={() => cells[rowIndex][colIndex] = !cells[rowIndex][colIndex]}
                     aria-label="Toggle cell at row {rowIndex + 1}, column {colIndex + 1}"
+                    on:click={() => cells[rowIndex][colIndex] = !cells[rowIndex][colIndex]}
+                    on:mouseover={() => currentRow = rowIndex}
+                    on:focus={() => currentRow = rowIndex}
                 >
-                    <span class="sequencer__cell-label">
-                        {['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].reverse()[rowIndex % 12]}
-                    </span>
                 </button>
             {/each}
         {/each}
@@ -60,6 +66,10 @@
                 &--accidental {
                     background-color: rgba(0, 0, 0, 0.05);
                 }
+
+                &--active {
+                    background-color: var(--theme-2);
+                }
             }
         }
         &__grid {
@@ -84,26 +94,9 @@
             }
             &:hover:not(&--active) {
                 background-color: rgba(255, 255, 255, 0.1);
-                // show label on hover
-                .sequencer__cell-label {                    
-                    display: flex;
-                }   
             }
             &--active {
                 background-color: var(--theme-2);
-            }
-
-            &-label {
-                display: none;
-                justify-content: center;
-                align-items: center;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                color: white;
-
             }
         }
     }
