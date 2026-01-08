@@ -21,18 +21,27 @@
     class:sequencer--collapsed={collapsed}
 >
     <div class="sequencer__meta">
-        <button on:click={toggle}>{collapsed ? '▲' : '▼'}</button> 
+        <button on:click={toggle}>{collapsed ? '▲' : '▼'}</button>
+        <button on:click={() => {}}>n</button>
+        <button on:click={() => {}}>amp</button>
+        <button on:click={() => {}}>dur</button>
+        <button on:click={() => {}}>xy</button>
+        <button on:click={() => {}}>xy</button>
+        <button on:click={() => {}}>xy</button>
+        <button on:click={() => {}}>midi</button>
     </div>
+
     <div class="sequencer__piano">
         {#each Array(rows) as _, rowIndex}
             <div 
                 class="sequencer__piano-key" 
                 style="grid-row: {rowIndex + 1};"
-                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (rowIndex % 12) - 1)}
-                class:sequencer__piano-key--active={rowIndex === currentRow}
+                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (rowIndex % 12) - 1) || collapsed}
+                class:sequencer__piano-key--active={!collapsed && rowIndex === currentRow}
             ></div>
         {/each}
     </div>
+    
     <div 
         class="sequencer__grid"
         role="application"
@@ -87,10 +96,15 @@
                 width: 100%;
                 height: 1.5rem;
                 background: none;
-                border: none;
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 color: white;
-                font-size: 1rem;
+                font-size: .75rem;
                 cursor: pointer;
+                text-transform: uppercase;
+                :last-child {
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+                }
+
             }
         }
 
