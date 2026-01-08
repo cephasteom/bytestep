@@ -6,14 +6,20 @@
 </script>
 
 <main>
-    <div class="sequencer">
-        <Sequencer />
+    <div class="sequencers">
+        <Sequencer id={0} />
+        <Sequencer id={1} />
+        <Sequencer id={2} />
+        <Sequencer id={3} />
     </div>
 </main>
 
 <style lang="scss">
-    .sequencer {
+    .sequencers {
         width: 100%;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
     }
 </style>

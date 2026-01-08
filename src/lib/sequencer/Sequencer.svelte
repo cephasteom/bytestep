@@ -1,12 +1,18 @@
 <script lang="ts">
+    import { activeSequencer } from "$lib/stores";
+
+    export let id: number;
     const rows = 24;
     const cols = 32;
     let currentRow = 2;
 
     const cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
 
-    let collapsed = false;
-    const toggle = () => collapsed = !collapsed;
+    const toggle = () => {
+        activeSequencer.update(activeId => activeId === id ? null : id);
+    };
+
+    $: collapsed = $activeSequencer !== id;
 </script>
 
 <section 
