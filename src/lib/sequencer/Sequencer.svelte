@@ -4,13 +4,14 @@
     export let id: number;
     const rows = 24;
     const cols = 32;
-    let currentRow = 2;
+    let currentRow = -1;
 
-    const cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
+    let cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
 
-    const toggle = () => {
-        activeSequencer.update(activeId => activeId === id ? null : id);
-    };
+    const toggle = () => activeSequencer.update(activeId => 
+        activeId === id 
+            ? null 
+            : id);
 
     $: collapsed = $activeSequencer !== id;
 </script>
@@ -51,7 +52,11 @@
                             : cells[rowIndex][colIndex]
                     }
                     aria-label="Toggle cell at row {rowIndex + 1}, column {colIndex + 1}"
-                    on:click={() => cells[rowIndex][colIndex] = !cells[rowIndex][colIndex]}
+                    on:click={() => {
+                        collapsed
+                            ? (cells = cells.map((row) => row.map((cell, cIndex) => cIndex === colIndex ? false : cell)))
+                            : cells[rowIndex][colIndex] = !cells[rowIndex][colIndex]
+                    }}
                     on:mouseover={() => currentRow = rowIndex}
                     on:focus={() => currentRow = rowIndex}
                 >
@@ -63,8 +68,7 @@
 
 <style lang="scss">
     .sequencer {
-        border: 1px solid white;
-        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         display: grid;
         grid-template-columns: auto auto 1fr;
         max-height: calc(24 * 1.5rem);
@@ -95,11 +99,10 @@
             grid-template-rows: repeat(rows, .5fr);
             grid-template-columns: 1fr;
             width: 1.5rem;
-            border-right: 1px solid rgba(255, 255, 255, 0.5);
 
             &-key {
                 background-color: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 box-sizing: border-box;
                 height: 1.5rem;
                 
@@ -121,7 +124,7 @@
         }
 
         &__cell {
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-sizing: border-box;
             height: 1.5rem;
             background-color: transparent;
