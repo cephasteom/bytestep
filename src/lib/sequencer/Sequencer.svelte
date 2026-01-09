@@ -22,13 +22,6 @@
 >
     <div class="sequencer__meta">
         <button on:click={toggle}>{collapsed ? '▲' : '▼'}</button>
-        <button on:click={() => {}}>n</button>
-        <button on:click={() => {}}>amp</button>
-        <button on:click={() => {}}>dur</button>
-        <button on:click={() => {}}>xy</button>
-        <button on:click={() => {}}>xy</button>
-        <button on:click={() => {}}>xy</button>
-        <button on:click={() => {}}>midi</button>
     </div>
 
     <div class="sequencer__piano">
@@ -80,7 +73,7 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         display: grid;
         grid-template-columns: auto auto 1fr;
-        max-height: calc(24 * 1.5rem);
+        max-height: calc(24 * 3em);
         transition: max-height 0.3s ease;
         overflow: hidden;
 
@@ -91,32 +84,31 @@
 
         &__meta {
             width: 3rem;
+            display: grid;
+            grid-template-rows: repeat(rows, .5fr);
 
             & button {
                 width: 100%;
                 height: 1.5rem;
-                background: none;
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.1);
+                border: 0;
                 color: white;
                 font-size: .75rem;
                 cursor: pointer;
                 text-transform: uppercase;
-                :last-child {
-                    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
-                }
-
             }
         }
 
         &__piano {
             display: grid;
+            gap: 2px;
             grid-template-rows: repeat(rows, .5fr);
             grid-template-columns: 1fr;
             width: 1.5rem;
-
+            
             &-key {
                 background-color: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                border: 0;
                 box-sizing: border-box;
                 height: 1.5rem;
                 
@@ -131,6 +123,8 @@
         }
         &__grid {
             display: grid;
+            gap: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
             width: 100%;
             height: 100%;
             grid-template-columns: repeat(cols, 1fr);
@@ -138,16 +132,17 @@
         }
 
         &__cell {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 0;
             box-sizing: border-box;
             height: 1.5rem;
             background-color: transparent;
             cursor: pointer;
             padding: 0;
             position: relative;
+            background-color: rgba(255, 255, 255, 0.05);
 
             &--highlighted {
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: rgba(255, 255, 255, 0.1);
             }
             &:hover:not(&--active) {
                 background-color: rgba(255, 255, 255, 0.1);
