@@ -3,14 +3,14 @@
     import '$lib/styles.css';
 
     import Sequencer from '$lib/sequencer/Sequencer.svelte';
+    import { data } from '$lib/stores/musical';
 </script>
 
 <main>
     <div class="sequencers">
-        <Sequencer id={0} />
-        <Sequencer id={1} />
-        <Sequencer id={2} />
-        <Sequencer id={3} />
+        {#each $data as _, index}
+            <Sequencer id={index} />
+        {/each}
     </div>
 </main>
 

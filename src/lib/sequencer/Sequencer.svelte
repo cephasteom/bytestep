@@ -1,17 +1,17 @@
 <script lang="ts">
     import { activeSequencer } from "$lib/stores";
+    import { data, rows, cols } from "$lib/stores/musical";
 
     export let id: number;
-    const rows = 24;
-    const cols = 32;
     let currentRow = -1;
 
-    let cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
-
+    
     const toggle = () => activeSequencer.update(activeId => 
         activeId === id 
-            ? null 
-            : id);
+        ? null 
+        : id);
+    
+    let cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
 
     $: collapsed = $activeSequencer !== id;
 </script>
