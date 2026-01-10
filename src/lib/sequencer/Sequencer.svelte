@@ -1,17 +1,14 @@
 <script lang="ts">
     import { activeSequencer } from "$lib/stores";
-    import { data, rows, cols } from "$lib/stores/musical";
+    import { data, toggleCell, rows, cols } from "$lib/stores/musical";
 
     export let id: number;
     let currentRow = -1;
 
-    
     const toggle = () => activeSequencer.update(activeId => 
         activeId === id 
         ? null 
         : id);
-    
-    let cells = Array(rows).fill(null).map(() => Array(cols).fill(false));
 
     $: collapsed = $activeSequencer !== id;
 </script>
@@ -48,17 +45,9 @@
                     data-row={rowIndex}
                     style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};}"
                     class:sequencer__cell--highlighted={!(Math.floor(colIndex / 4) % 2)}
-                    class:sequencer__cell--active={
-                        collapsed
-                            ? cells.some(row => row[colIndex]) && rowIndex === 0
-                            : cells[rowIndex][colIndex]
-                    }
+                    class:sequencer__cell--active={$data[id][rowIndex][colIndex].amp > 0}
                     aria-label="Toggle cell at row {rowIndex + 1}, column {colIndex + 1}"
-                    on:click={() => {
-                        collapsed
-                            ? (cells = cells.map((row) => row.map((cell, cIndex) => cIndex === colIndex ? false : cell)))
-                            : cells[rowIndex][colIndex] = !cells[rowIndex][colIndex]
-                    }}
+                    on:click={() => toggleCell(id, rowIndex, colIndex)}
                     on:mouseover={() => currentRow = rowIndex}
                     on:focus={() => currentRow = rowIndex}
                 >
