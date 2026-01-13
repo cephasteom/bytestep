@@ -3,39 +3,39 @@
     import { data, toggleNote, moveNote, divisions, bars, notes } from "$lib/stores/musical";
 
     export let id: number;
-    let currentRow = -1;
+    let currentNote = -1;
     
     // for moving
     let mouseIsDown = false;
-    let startCol = -1;
-    let startRow = -1;
+    let startDivision = -1;
+    let startNote = -1;
 
     const toggle = () => activeSequencer.update(activeId => 
         activeId === id 
-        ? null 
-        : id);
+            ? null 
+            : id);
 
-    const handleMouseDown = (colIndex: number, rowIndex: number) => {
+    const handleMouseDown = (divisionIndex: number, noteIndex: number) => {
         mouseIsDown = true;
-        startCol = colIndex;
-        startRow = rowIndex;
+        startDivision = divisionIndex;
+        startNote = noteIndex;
     };
 
-    const handleMouseUp = (colIndex: number, rowIndex: number) => {
-        startCol === colIndex && startRow === rowIndex
-            ? toggleNote(id, colIndex, rowIndex)
-            : moveNote(id, startCol, startRow, colIndex, rowIndex);
+    const handleMouseUp = (divisionIndex: number, noteIndex: number) => {
+        startDivision === divisionIndex && startNote === noteIndex
+            ? toggleNote(id, divisionIndex, noteIndex)
+            : moveNote(id, startDivision, startNote, divisionIndex, noteIndex);
         
-        startCol = -1;
-        startRow = -1;
+        startDivision = -1;
+        startNote = -1;
         mouseIsDown = false;
     }
 
     const handleMouseLeave = () => {
         mouseIsDown = false;
-        startCol = -1;
-        startRow = -1;
-        currentRow = -1;
+        startDivision = -1;
+        startNote = -1;
+        currentNote = -1;
     };
 
     $: collapsed = $activeSequencer !== id;
@@ -50,12 +50,12 @@
     </div>
 
     <div class="sequencer__piano">
-        {#each Array(notes) as _, rowIndex}
+        {#each Array(notes) as _, noteIndex}
             <div 
                 class="sequencer__piano-key" 
-                style="grid-row: {rowIndex + 1};"
-                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (rowIndex % 12) - 1) || collapsed}
-                class:sequencer__piano-key--active={!collapsed && rowIndex === currentRow}
+                style="grid-row: {noteIndex + 1};"
+                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (noteIndex % 12) - 1) || collapsed}
+                class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
             ></div>
         {/each}
     </div>
@@ -65,19 +65,19 @@
         role="application"
         on:mouseleave={handleMouseLeave}
     >
-        {#each Array(divisions * bars) as _, colIndex}
-            {#each Array(notes) as _, rowIndex}
+        {#each Array(divisions * bars) as _, divisionIndex}
+            {#each Array(notes) as _, noteIndex}
                 <button 
                     class="sequencer__cell" 
-                    style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};}"
-                    class:sequencer__cell--highlighted={!(Math.floor(colIndex / 4) % 2)}
-                    class:sequencer__cell--active={$data[id][colIndex][rowIndex].amp > 0}
+                    style="grid-column: {divisionIndex + 1}; grid-row: {noteIndex + 1};}"
+                    class:sequencer__cell--highlighted={!(Math.floor(divisionIndex / 4) % 2)}
+                    class:sequencer__cell--active={$data[id][divisionIndex][noteIndex].amp > 0}
                     class:mouseIsDown={mouseIsDown}
-                    aria-label="Toggle cell at row {rowIndex + 1}, column {colIndex + 1}"
-                    on:mouseover={() => currentRow = rowIndex}
-                    on:focus={() => currentRow = rowIndex}
-                    on:mousedown={() => handleMouseDown(colIndex, rowIndex)}
-                    on:mouseup={() => handleMouseUp(colIndex, rowIndex)}
+                    aria-label="Toggle cell at row {noteIndex + 1}, column {divisionIndex + 1}"
+                    on:mouseover={() => currentNote = noteIndex}
+                    on:focus={() => currentNote = noteIndex}
+                    on:mousedown={() => handleMouseDown(divisionIndex, noteIndex)}
+                    on:mouseup={() => handleMouseUp(divisionIndex, noteIndex)}
                 >
                 </button>
             {/each}
