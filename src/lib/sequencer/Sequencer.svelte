@@ -1,6 +1,6 @@
 <script lang="ts">
     import { activeSequencer } from "$lib/stores";
-    import { data, toggleCell, moveCell, rows, cols } from "$lib/stores/musical";
+    import { data, toggleNote, moveNote, divisions, bars, notes } from "$lib/stores/musical";
 
     export let id: number;
     let currentRow = -1;
@@ -23,8 +23,8 @@
 
     const handleMouseUp = (colIndex: number, rowIndex: number) => {
         startCol === colIndex && startRow === rowIndex
-            ? toggleCell(id, rowIndex, colIndex)
-            : moveCell(id, startRow, startCol, rowIndex, colIndex);
+            ? toggleNote(id, colIndex, rowIndex)
+            : moveNote(id, startCol, startRow, colIndex, rowIndex);
         
         startCol = -1;
         startRow = -1;
@@ -50,7 +50,7 @@
     </div>
 
     <div class="sequencer__piano">
-        {#each Array(rows) as _, rowIndex}
+        {#each Array(notes) as _, rowIndex}
             <div 
                 class="sequencer__piano-key" 
                 style="grid-row: {rowIndex + 1};"
@@ -65,13 +65,13 @@
         role="application"
         on:mouseleave={handleMouseLeave}
     >
-        {#each Array(cols) as _, colIndex}
-            {#each Array(rows) as _, rowIndex}
+        {#each Array(divisions * bars) as _, colIndex}
+            {#each Array(notes) as _, rowIndex}
                 <button 
                     class="sequencer__cell" 
                     style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};}"
                     class:sequencer__cell--highlighted={!(Math.floor(colIndex / 4) % 2)}
-                    class:sequencer__cell--active={$data[id][rowIndex][colIndex].amp > 0}
+                    class:sequencer__cell--active={$data[id][colIndex][rowIndex].amp > 0}
                     class:mouseIsDown={mouseIsDown}
                     aria-label="Toggle cell at row {rowIndex + 1}, column {colIndex + 1}"
                     on:mouseover={() => currentRow = rowIndex}
