@@ -4,8 +4,6 @@
 
     export let id: number;
     let currentNote = -1;
-    
-    // for moving
     let mouseIsDown = false;
     let startDivision = -1;
     let startNote = -1;
@@ -53,8 +51,8 @@
         {#each Array(notes) as _, noteIndex}
             <div 
                 class="sequencer__piano-key" 
-                style="grid-row: {noteIndex + 1};"
-                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(12 - (noteIndex % 12) - 1) || collapsed}
+                style="grid-row: {(notes - noteIndex) + 1};"
+                class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12) || collapsed}
                 class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
             ></div>
         {/each}
@@ -69,7 +67,7 @@
             {#each Array(notes) as _, noteIndex}
                 <button 
                     class="sequencer__cell" 
-                    style="grid-column: {divisionIndex + 1}; grid-row: {noteIndex + 1};}"
+                    style="grid-column: {divisionIndex + 1}; grid-row: {(notes - noteIndex) + 1};}"
                     class:sequencer__cell--highlighted={!(Math.floor(divisionIndex / 4) % 2)}
                     class:sequencer__cell--active={$data[id][divisionIndex][noteIndex].amp > 0}
                     class:mouseIsDown={mouseIsDown}
@@ -90,9 +88,9 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         display: grid;
         grid-template-columns: auto auto 1fr;
-        max-height: calc(24 * 3em);
+        max-height: calc(24 * 1.5em);
         transition: max-height 0.3s ease;
-        overflow: hidden;
+        overflow: scroll;
 
         &--collapsed {
             transition: max-height 0.3s ease;
@@ -102,7 +100,7 @@
         &__meta {
             width: 3rem;
             display: grid;
-            grid-template-rows: repeat(rows, .5fr);
+            grid-template-rows: repeat(notes, .5fr);
 
             & button {
                 width: 100%;
@@ -119,7 +117,7 @@
         &__piano {
             display: grid;
             gap: 2px;
-            grid-template-rows: repeat(rows, .5fr);
+            grid-template-rows: repeat(notes, .5fr);
             grid-template-columns: 1fr;
             width: 1.5rem;
             
@@ -144,8 +142,8 @@
             background-color: rgba(255, 255, 255, 0.1);
             width: 100%;
             height: 100%;
-            grid-template-columns: repeat(cols, 1fr);
-            grid-template-rows: repeat(rows, .5fr);
+            grid-template-columns: repeat(calc(divisions * bars), 1fr);
+            grid-template-rows: repeat(notes, .5fr);
         }
 
         &__cell {

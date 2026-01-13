@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 export const sequencers = 4;
 export const divisions = 16;
 export const bars = 2;
-export const notes = 16; // change to 127
+export const notes = 60; // 5 octaves
 
 export type Note = {
     amp: number;
