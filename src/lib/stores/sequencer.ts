@@ -1,3 +1,6 @@
+// TODO: refactor data. should be {sequencerIndex: Note[] } }, with the division stored in the Note object
+// this means we aren't fixed to the grid structure and can have notes at any division point
+
 import { get, writable } from "svelte/store";
 
 export const sequencers = 4;
@@ -9,6 +12,7 @@ export type Note = {
     note: number;
     amp: number;
     duration: number;
+    // position: number; // in cycles
 };
 
 export type SequencerData = {
