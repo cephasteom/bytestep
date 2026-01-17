@@ -1,5 +1,6 @@
 <script lang="ts">
     import { activeSequencer } from "$lib/stores/sequencer";
+    import { inputs, outputs, connectInput, connectOutput } from "$lib/stores/midi";
     import { t } from '$lib/stores/transport';
     import { data, toggleNote, moveNote, divisions, bars, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencer";
     import Cell from "./Cell.svelte";
@@ -42,6 +43,26 @@
     $: collapsed = $activeSequencer !== id;
 </script>
 
+<div class="midi">
+    <div>
+        <label for="midi-input-{id}">MIDI In</label>
+        <select id="midi-input-{id}" on:change={(e) => connectInput(id, (e.target as HTMLInputElement).value)}>
+            <option value={null}>None</option>
+            {#each $inputs as input}
+                <option value={input}>{input}</option>
+            {/each}
+        </select>
+    </div>
+    <div>
+        <label for="midi-output-{id}">MIDI Out</label>
+        <select id="midi-output-{id}" on:change={(e) => connectOutput(id, (e.target as HTMLInputElement).value)}>
+            <option value={null}>None</option>
+            {#each $outputs as output}
+                <option value={output}>{output}</option>
+            {/each}
+        </select>
+    </div>
+</div>
 <section class="sequencer">
     <div class="sequencer__meta">
         <button on:click={toggle}>
@@ -94,9 +115,28 @@
 </section>
 
 <style lang="scss">
+    .midi {
+        display: flex;
+        gap: 1rem;
+
+        label {
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+            color: white;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 0;
+            color: white;
+            padding: 0.25rem;
+            font-size: 0.875rem;
+        }   
+    }
     .sequencer {
         display: grid;
         grid-template-columns: 3rem auto;
+        margin-bottom: 1rem;
 
         &__meta {
             width: 3rem;

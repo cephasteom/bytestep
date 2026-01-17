@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@babel/runtime@^7.25.6", "@babel/runtime@^7.28.4":
+"@babel/runtime@^7.20.6", "@babel/runtime@^7.25.6", "@babel/runtime@^7.28.4":
   version "7.28.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.6.tgz#d267a43cb1836dc4d182cce93ae75ba954ef6d2b"
   integrity sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==
@@ -529,6 +529,13 @@ devalue@^5.3.2, devalue@^5.5.0:
   resolved "https://registry.yarnpkg.com/devalue/-/devalue-5.6.1.tgz#f4c0a6e71d1a2bc50c02f9ca3c54ecafeb6a0445"
   integrity sha512-jDwizj+IlEZBunHcOuuFVBnIMPAEHvTsJj0BcIp94xYguLRVBcXO853px/MyIJvbVzWdsGvrRweIUWJw8hBP7A==
 
+djipevents@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/djipevents/-/djipevents-2.0.7.tgz#4805dcb8dcf0b4a2c6e51eaecdfc218bb8f202fb"
+  integrity sha512-KNFYaU85imxOCKOUsIR70Iz9E19r96/X7LSH+u0tSoZdpWcBdzoqtTsU+wuLhc6GMpSFob+KInkZAbfKi01Bjg==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+
 esbuild@^0.27.0:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.27.2.tgz#d83ed2154d5813a5367376bb2292a9296fc83717"
@@ -623,6 +630,18 @@ is-reference@^3.0.3:
   integrity sha512-ixkJoqQvAP88E6wLydLGGqCJsrFUnqoH6HnaczB8XmDH1oaWU+xxdptvikTgaEhtZ53Ky6YXiBuUI2WXLMCwjw==
   dependencies:
     "@types/estree" "^1.0.6"
+
+jazz-midi@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/jazz-midi/-/jazz-midi-1.7.9.tgz#ad564e85acf12414aec7ef7d879ad61a5d7f6896"
+  integrity sha512-c8c4BBgwxdsIr1iVm53nadCrtH7BUlnX3V95ciK/gbvXN/ndE5+POskBalXgqlc/r9p2XUbdLTrgrC6fou5p9w==
+
+jzz@^1.8.5:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/jzz/-/jzz-1.9.6.tgz#557c64d9766d7c1e60d5b1be510be752a913ad21"
+  integrity sha512-J7ENLhXwfm2BNDKRUrL8eKtPhUS/CtMBpiafxQHDBcOWSocLhearDKEdh+ylnZFcr5OXWTed0gj6l/txeQA9vg==
+  dependencies:
+    jazz-midi "^1.7.9"
 
 kleur@^4.1.5:
   version "4.1.5"
@@ -1034,6 +1053,15 @@ vitefu@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-1.1.1.tgz#c39b7e4c91bf2f6c590fb96e0758f394dff5795b"
   integrity sha512-B/Fegf3i8zh0yFbpzZ21amWzHmuNlLlmJT6n7bu5e+pCHUKQIfXSYokrqOBGEMMe9UG2sostKQF9mml/vYaWJQ==
+
+webmidi@^3.1.14:
+  version "3.1.14"
+  resolved "https://registry.yarnpkg.com/webmidi/-/webmidi-3.1.14.tgz#4b4f5a67aa718b9ac691f97b737cac0281cd3dbb"
+  integrity sha512-K9GzNm0J3R/61NJWAW7ipAJGWU5D/8bEjOir3PymFjLDpbQJ+ygjvm5jx/WQ8atQ1hu23St3lvnc5g1NKbOsrw==
+  dependencies:
+    djipevents "^2.0.7"
+  optionalDependencies:
+    jzz "^1.8.5"
 
 zimmerframe@^1.1.2:
   version "1.1.4"
