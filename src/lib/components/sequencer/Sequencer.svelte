@@ -80,7 +80,7 @@
                         note={noteIndex}
                         row={(notes - noteIndex) + 1}
                         highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                        on={$data[id][divisionIndex][noteIndex].amp > 0}
+                        on={$data[id].some(n => n.position === divisionIndex && n.note === noteIndex)}
                         active={$t % (divisions * bars) === divisionIndex}
                         handleMouseOver={() => currentNote = noteIndex}
                         handleMouseDown={handleMouseDown}
