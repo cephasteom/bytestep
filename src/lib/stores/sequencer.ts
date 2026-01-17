@@ -12,16 +12,11 @@ export type Note = {
     duration: number;
 };
 
-export type SequencerData = {
-    [sequencerIndex: number]: Note[]
-};
+export type SequencerData = { [sequencerIndex: number]: Note[] };
 
 const createInitialData = (): SequencerData =>
     Array.from({ length: sequencers }).reduce<SequencerData>(
-        (sequencerAcc, _, s) => ({
-            ...sequencerAcc,
-            [s]: []
-        }), {});
+        (acc, _, s) => ({ ...acc, [s]: []}), {});
 
 export const activeSequencer = writable<number | null>(null);
 export const data = writable<SequencerData>(createInitialData());
@@ -45,7 +40,6 @@ export const toggleNote = (
         };
     });
 };
-
 
 export const moveNote = (
     sequencer: number,
