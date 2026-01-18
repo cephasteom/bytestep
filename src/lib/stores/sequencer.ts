@@ -3,7 +3,7 @@ import { get, writable } from "svelte/store";
 export const sequencers = 4;
 export const divisions = 16;
 export const bars = 2;
-export const notes = 60; // 5 octaves
+export const notes = 60;
 
 export type Note = {
     position: number; // in cycles
@@ -65,7 +65,7 @@ export const moveNote = (
 export const query: (position: number) => { [sequencerIndex: number]: Note[] } = (position: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => ({
         ...acc,
-        [i]: s.filter((n) => n.position === position)
+        [i]: s.filter((n) => n.position >= position || n.position < position + (1 / divisions))
     }), {});
 };
 
