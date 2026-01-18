@@ -4,6 +4,7 @@ export const sequencers = 4;
 export const divisions = 16;
 export const bars = 2;
 export const notes = 60;
+export const activeSequencer = writable<number | null>(null);
 
 export type Note = {
     position: number; // in cycles
@@ -14,13 +15,19 @@ export type Note = {
 
 export type SequencerData = { [sequencerIndex: number]: Note[] };
 
-const createInitialData = (): SequencerData =>
+export const data = writable<SequencerData>(
     Array.from({ length: sequencers }).reduce<SequencerData>(
-        (acc, _, s) => ({ ...acc, [s]: []}), {});
+        (acc, _, s) => ({ ...acc, [s]: []}), {})
+);
 
-export const activeSequencer = writable<number | null>(null);
-export const data = writable<SequencerData>(createInitialData());
-
+/**
+ * Add a note if it doesn't exist at the given position/note, or remove it if it does
+ * @param sequencer 
+ * @param position 
+ * @param note 
+ * @param amp 
+ * @param duration 
+ */
 export const toggleNote = (
     sequencer: number,
     position: number,
@@ -41,6 +48,14 @@ export const toggleNote = (
     });
 };
 
+/**
+ * Move a note from one position/note to another
+ * @param sequencer 
+ * @param fromPosition 
+ * @param fromNote 
+ * @param toPosition 
+ * @param toNote 
+ */
 export const moveNote = (
     sequencer: number,
     fromPosition: number,
@@ -62,6 +77,12 @@ export const moveNote = (
     });
 };
 
+/**
+ * Query notes at a given position across all sequencers
+ * TODO: not quite right - should be able to accept positions not exactly on division boundaries
+ * @param position 
+ * @returns 
+ */
 export const query: (position: number) => { [sequencerIndex: number]: Note[] } = (position: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => ({
         ...acc,
