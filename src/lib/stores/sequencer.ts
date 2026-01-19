@@ -102,6 +102,11 @@ export const happensWithin = (division: number, position: number) => {
     return div === pos;
 };
 
+/**
+ * Convert a division to a position within the cycle
+ * @param division 
+ * @returns 
+ */
 export const divisionToPosition = (division: number) => {
     return (division / divisions);
 }

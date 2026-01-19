@@ -17,6 +17,10 @@ export const connections = writable<{[sequencer: number]: {input: string | null,
 connections.subscribe((conns) => console.log("MIDI Connections:", conns));
 
 const connect = (type: "input" | "output", sequencer: number, device: string | null) => {
+    // check if any current connection is being used by another sequencer
+    // if not, remove listeners from the old device
+    // then, add listeners to the new device
+    // update the store
     connections.update((conns) => ({
         ...conns,
         [sequencer]: {
