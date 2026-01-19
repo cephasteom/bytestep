@@ -1,8 +1,9 @@
-import { getTransport, immediate, Loop, getDraw, now } from 'tone'
+import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get } from 'svelte/store';
 import { bars, divisions, divisionToPosition, query } from './sequencer';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
+import { beepAt } from '$lib/sound/utils';
 
 export const cps = writable(.5);
 export const t = writable(-1); // time pointer in divisions
@@ -13,6 +14,9 @@ export const toggleIsPlaying = () => isPlaying.update(p => !p);
 
 export const isRecording = writable(false);
 export const toggleIsRecording = () => isRecording.update(r => !r);
+
+export const isMetronome = writable(false);
+export const toggleIsMetronome = () => isMetronome.update(m => !m);
 
 const transport = getTransport()
 const draw = getDraw();
@@ -29,10 +33,15 @@ new Loop(time => {
 
     // get time pointer
     const nextT = get(t) + 1;
+
     // advance time pointer at scheduled time
     draw.schedule(() => get(isPlaying) && t.set(nextT), time);
+
     // set transport bpm based on cps store
     transport.bpm.setValueAtTime(240 * get(cps), time);
+
+    // if metronome is enabled, play click sound
+    get(isMetronome) && !(nextT%4) && beepAt(delta);
 
     const events = query(divisionToPosition(nextT));
     const conns = get(connections);

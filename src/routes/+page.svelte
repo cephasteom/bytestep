@@ -8,9 +8,7 @@
     import { onMount } from 'svelte';
     import { loadAllStoreData } from '$lib/stores/localstorage';
 
-    onMount(() => {
-        loadAllStoreData();    
-    });
+    onMount(() => loadAllStoreData());
 </script>
 
 <main>

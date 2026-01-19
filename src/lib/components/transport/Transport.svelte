@@ -1,6 +1,6 @@
 <script lang="ts">
     import Button from '$lib/components/Button.svelte';
-    import { isPlaying, toggleIsPlaying, isRecording, toggleIsRecording, mapTransportKeys } from '$lib/stores/transport';
+    import { isPlaying, toggleIsPlaying, isRecording, toggleIsRecording, mapTransportKeys, toggleIsMetronome, isMetronome } from '$lib/stores/transport';
     import SVG from '$lib/components/SVG.svelte';
     import { onMount } from 'svelte';
 
@@ -19,6 +19,7 @@
             <SVG type="play" />
         {/if}
     </Button>
+    
     <Button
         onClick={toggleIsRecording}
     >
@@ -26,6 +27,16 @@
             <SVG type="circle--solid" />
         {:else}
             <SVG type="circle" />
+        {/if}
+    </Button>
+
+    <Button
+        onClick={toggleIsMetronome}
+    >
+        {#if $isMetronome}
+            <SVG type="bell--solid" />
+        {:else}
+            <SVG type="bell" />
         {/if}
     </Button>
 </div>
