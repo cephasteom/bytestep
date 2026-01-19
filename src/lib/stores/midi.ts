@@ -1,7 +1,8 @@
 import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
 import { data, addNote } from "./sequencer";
-import { timeToPosition } from "./transport";
+import { isRecording, timeToPosition } from "./transport";
+import { immediate } from "tone";
 
 export const inputs = writable<any[]>([]);
 export const outputs = writable<any[]>([]);
@@ -20,10 +21,11 @@ const addListeners = () => {
     // add listeners
     WebMidi.inputs.forEach(input => {
         input.addListener("noteon", (e) => {
+            if(!get(isRecording)) return;
             Object.entries(get(connections))
                 .filter(([_, conn]) => conn.input === input.name)
                 .forEach(([sequencer, _]) => {
-                    const position = timeToPosition(e.timestamp);
+                    const position = timeToPosition(immediate() * 1000);
                     addNote(
                         parseInt(sequencer),
                         position,

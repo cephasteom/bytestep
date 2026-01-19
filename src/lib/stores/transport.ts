@@ -6,18 +6,23 @@ import { WebMidi } from 'webmidi';
 
 export const cps = writable(.5);
 export const t = writable(-1); // time pointer in divisions
-export const isPlaying = writable(false);
 export const startedAt = writable<number | null>(null);
+
+export const isPlaying = writable(false);
 export const toggleIsPlaying = () => isPlaying.update(p => !p);
+
+export const isRecording = writable(false);
+export const toggleIsRecording = () => isRecording.update(r => !r);
 
 const transport = getTransport()
 const draw = getDraw();
 
 isPlaying.subscribe(playing => {
     playing
-        ? startedAt.set((now() + 0.1) * 1000)
-        : null;
+        ? startedAt.set(immediate() * 1000)
+        : isRecording.set(false);
 });
+isRecording.subscribe(recording => recording && isPlaying.set(true));
 
 new Loop(time => {
     const delta = time - immediate()
@@ -65,13 +70,15 @@ export const mapTransportKeys = () => {
             toggleIsPlaying();
             e.preventDefault();
         }
+        if (e.code === 'KeyR' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+            toggleIsRecording();
+            e.preventDefault();
+        }
     };
 
     window.addEventListener('keydown', handleKeyDown);
 
-    return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
 };
 
 /**
