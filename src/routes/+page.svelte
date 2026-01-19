@@ -5,6 +5,12 @@
     import Sequencer from '$lib/components/sequencer/Sequencer.svelte';
     import { sequencers } from '$lib/stores/sequencer';
     import Transport from '$lib/components/transport/Transport.svelte';
+    import { onMount } from 'svelte';
+    import { loadAllStoreData } from '$lib/stores/localstorage';
+
+    onMount(() => {
+        loadAllStoreData();    
+    });
 </script>
 
 <main>

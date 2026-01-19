@@ -1,6 +1,6 @@
 <script lang="ts">
     import { activeSequencer } from "$lib/stores/sequencer";
-    import { inputs, outputs, connectInput, connectOutput } from "$lib/stores/midi";
+    import { inputs, outputs, connectInput, connectOutput, connections } from "$lib/stores/midi";
     import { t } from '$lib/stores/transport';
     import { data, toggleNote, moveNote, divisions, bars, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencer";
     import Cell from "./Cell.svelte";
@@ -46,7 +46,11 @@
 <div class="midi">
     <div>
         <label for="midi-input-{id}">MIDI In</label>
-        <select id="midi-input-{id}" on:change={(e) => connectInput(id, (e.target as HTMLInputElement).value)}>
+        <select 
+            id="midi-input-{id}" 
+            on:change={(e) => connectInput(id, (e.target as HTMLInputElement).value)}
+            value={$connections[id]?.input}
+        >
             <option value={null}>None</option>
             {#each $inputs as input}
                 <option value={input}>{input}</option>
@@ -55,7 +59,11 @@
     </div>
     <div>
         <label for="midi-output-{id}">MIDI Out</label>
-        <select id="midi-output-{id}" on:change={(e) => connectOutput(id, (e.target as HTMLInputElement).value)}>
+        <select 
+            id="midi-output-{id}" 
+            on:change={(e) => connectOutput(id, (e.target as HTMLInputElement).value)}
+            value={$connections[id]?.output}
+        >
             <option value={null}>None</option>
             {#each $outputs as output}
                 <option value={output}>{output}</option>

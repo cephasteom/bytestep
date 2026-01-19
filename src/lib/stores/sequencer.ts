@@ -39,6 +39,7 @@ export const addNote = (
             // ensure unique position and note
             .filter((n, i, arr) => arr.findIndex(o => o.position === n.position && o.note === n.note) === i)
     }));
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -67,6 +68,7 @@ export const toggleNote = (
                 : notes.concat({ position: position, note, amp, duration })
         };
     });
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -96,6 +98,7 @@ export const moveNote = (
                 .concat({ ...note, position: toPosition, note: toNote })
         }
     });
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**

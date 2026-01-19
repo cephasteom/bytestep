@@ -58,6 +58,8 @@ const connect = (type: "input" | "output", sequencer: number, device: string | n
             [type]: device
         }
     }));
+    // persist to localstorage
+    localStorage.setItem("bs.midiConnections", JSON.stringify(get(connections)));
 };
 
 export const connectInput = (sequencer: number, inputName: string | null) => {
