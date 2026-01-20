@@ -117,7 +117,7 @@
                         note={noteIndex}
                         row={(notes - noteIndex) + 1}
                         highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                        on={$data[id].some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}
+                        on={$data[id].some(n => happensWithin(divisionIndex, n.position) && (collapsed || n.note === noteIndex))}   
                         active={$t % (divisions * bars) === divisionIndex}
                         handleMouseOver={() => currentNote = noteIndex}
                         handleMouseDown={handleMouseDown}
@@ -186,11 +186,11 @@
             display: grid;
             grid-template-columns: auto 1fr;
             max-height: calc(24 * (1.5em + 2px) - 2px);
-            transition: max-height 0.3s ease;
+            transition: max-height 0.15s ease;
             overflow: scroll;
 
             &--collapsed {
-                transition: max-height 0.3s ease;
+                transition: max-height 0.15s ease;
                 max-height: 1.5rem;
             }
         }
