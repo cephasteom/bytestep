@@ -60,12 +60,12 @@ export const toggleNote = (
 ) => {
     data.update((sequencers) => {
         const notes = sequencers[sequencer];
-        const exists = notes.some(n => n.position === position && n.note === note);
+        const exists = notes.some(n => floorPosition(n.position) === position && n.note === note);
 
         return {
             ...sequencers,
             [sequencer]: exists
-                ? notes.filter(n => !(n.position === position && n.note === note))
+                ? notes.filter(n => !(floorPosition(n.position) === position && n.note === note))
                 : notes.concat({ position: position, note, amp, duration })
         };
     });
