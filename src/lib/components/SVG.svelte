@@ -24,7 +24,7 @@
 
 <style lang="scss">
     svg {
-        width: 0.5rem;
+        width: 0.75rem;
         height: auto;
         fill: white;
     }

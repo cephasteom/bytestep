@@ -12,11 +12,13 @@
     let mouseIsDown = false;
     let startDivision = -1;
     let startNote = -1;
+    let contentElement: HTMLElement;
 
-    const toggle = () => activeSequencer.update(activeId => 
-        activeId === id 
-            ? null 
-            : id);
+    const toggle = () => {
+        activeSequencer.update(activeId => 
+            activeId === id ? null : id);
+        contentElement && (contentElement.scrollTop = 0);
+    }
 
     const handleMouseDown = (divisionIndex: number, noteIndex: number) => {
         mouseIsDown = true;
@@ -93,6 +95,7 @@
     <div 
         class="sequencer__content"
         class:sequencer__content--collapsed={collapsed}
+        bind:this={contentElement}
     >
         <div class="sequencer__piano">
             {#each Array(notes) as _, noteIndex}
@@ -101,7 +104,7 @@
                     style="grid-row: {(notes - noteIndex) + 1};"
                     class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12) || collapsed}
                     class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
-                ></div>
+                >{!(noteIndex % 12) ? `C${Math.floor(noteIndex / 12)}` : ''}</div>
             {/each}
         </div>
         
@@ -208,6 +211,11 @@
                 border: 0;
                 box-sizing: border-box;
                 height: 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.625rem;
+                color: white;
                 
                 &--accidental {
                     background-color: rgba(0, 0, 0, 0.05);

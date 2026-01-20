@@ -13,7 +13,7 @@
         border: 1px solid white;
         background-color: transparent;
         color: white;
-        font-size: .75rem;
+        // font-size: .75rem;
         border-radius: 3px;
         opacity: 0.9;
         display: flex;
