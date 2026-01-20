@@ -123,7 +123,7 @@ export const clearSequencer = (sequencer: number) => {
 export const query: (division: number) => { [sequencerIndex: number]: Note[] } = (division: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => {
         const func = get(timeFunctions)[i] || ((t: number) => t);
-        const position = divisionToPosition(func(division, divisions * bars));
+        const position = divisionToPosition(func(division, Math.floor(division / (divisions * bars))));
         return {
         ...acc,
         [i]: s.filter((n) => 

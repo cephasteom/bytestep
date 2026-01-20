@@ -30,10 +30,8 @@
         );
 
         editor.textarea.addEventListener('keydown', (e) => {
-            // store locally
             localStorage.setItem("bs.code", editor.value);
 
-            // evaluate on ctrl+enter
             if (e.key === 'Enter' && e.ctrlKey) {
                 e.preventDefault();
                 window.dispatchEvent(new CustomEvent("evaluateCode", { detail: { code: editor.value } }));
@@ -48,4 +46,3 @@
 <style lang="scss">
     
 </style>
-

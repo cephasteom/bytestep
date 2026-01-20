@@ -10,7 +10,6 @@
     import Transport from '$lib/components/transport/Transport.svelte';
     import Editor from '$lib/components/editor/Editor.svelte';
 
-
     onMount(() => {
         loadAllStoreData()
         initCodeListeners();
