@@ -63,12 +63,6 @@ new Loop(time => {
 
         const midiOutput = WebMidi.getOutputByName(output);
         if (!midiOutput) return;
-
-        // stop all notes slightly before scheduling new ones to avoid stuck notes
-        Array.from({ length: 128 }, (_, i) => i)
-            .forEach(note => midiOutput.stopNote(note, {
-                time: `+${delta * 1000 - 10}`,
-            }));   
         
         notes.forEach(({ position, note, amp, duration }) => {
             const latencyCompensation = 115; // in ms, empirical value to offset scheduling latency

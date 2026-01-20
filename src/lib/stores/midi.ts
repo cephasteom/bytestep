@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
-import { data, addNote, divisions } from "./sequencer";
+import { data, addNote, divisions, type Note } from "./sequencer";
 import { isRecording, timeToPosition } from "./transport";
 import { immediate } from "tone";
 
@@ -15,28 +15,54 @@ const populate = () => {
     outputs.set(WebMidi.outputs.map(output => output.name));
 };
 
+
 const addListeners = () => {
     // remove existing listeners
     WebMidi.inputs.forEach(input => input.removeListener());
+    
     // add listeners
     WebMidi.inputs.forEach(input => {
+        let activeNotes: Note[] = [];
+
+        // note on adds note to activeNotes
         input.addListener("noteon", (e) => {
             if(!get(isRecording)) return;
+            const position = timeToPosition(immediate() * 1000);
+                activeNotes = [
+                    ...activeNotes,
+                    {
+                        position,
+                        note: e.note.number,
+                        // @ts-ignore
+                        amp: e.velocity,
+                        duration: 0 // to be updated on noteoff
+                    }
+                ];
+        });
+        
+        input.addListener("noteoff", (e) => {
+            const noteIndex = activeNotes.findIndex(n => n.note === e.note.number && n.duration === 0);
+            if(noteIndex === -1) return;
+            const note = activeNotes[noteIndex];
+            const position = timeToPosition(immediate() * 1000);
+            const duration = position - note.position;
+            // update the note with duration
+            activeNotes[noteIndex].duration = duration > 0 ? duration : (1/divisions);
+            // add to sequencer
             Object.entries(get(connections))
                 .filter(([_, conn]) => conn.input === input.name)
                 .forEach(([sequencer, _]) => {
-                    const position = timeToPosition(immediate() * 1000);
                     addNote(
                         parseInt(sequencer),
-                        position,
-                        e.note.number,
-                        // @ts-ignore
-                        e.velocity || 0.75,
-                        1/divisions
+                        note.position,
+                        note.note,
+                        note.amp,
+                        activeNotes[noteIndex].duration
                     );
                 });
+            // remove from activeNotes
+            activeNotes = activeNotes.filter((_, i) => i !== noteIndex);
         });
-        // TODO: handle noteoffs for durations
     });
 };
 
