@@ -116,14 +116,17 @@ export const clearSequencer = (sequencer: number) => {
 
 /**
  * Query notes at a given position across all sequencers
- * TODO: not quite right - should be able to accept positions not exactly on division boundaries
  * @param position 
  * @returns 
  */
 export const query: (position: number) => { [sequencerIndex: number]: Note[] } = (position: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => ({
         ...acc,
-        [i]: s.filter((n) => n.position >= position && n.position < position + (1 / divisions))
+        [i]: s.filter((n) => 
+            // note happens on or after position
+            n.position >= position 
+            // but before next division
+            && n.position < floorPosition(position) + (1 / divisions))
     }), {});
 };
 
