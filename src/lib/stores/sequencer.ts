@@ -5,7 +5,7 @@ export const divisions = 16;
 export const bars = 2;
 export const notes = 127 - 36;
 export const activeSequencer = writable<number | null>(null);
-export const quantize = writable(false);
+export const quantize = writable(true);
 export const timeFunctions = writable({} as Record<number, (t: number, c: number) => number>);
 
 export type Note = {

@@ -5,7 +5,7 @@ import { connections } from './midi';
 import { WebMidi } from 'webmidi';
 import { beepAt } from '$lib/sound/utils';
 
-export const cps = writable(.25);
+export const cps = writable(.5);
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
 export const startedAt = writable<number | null>(null);
@@ -65,6 +65,7 @@ new Loop(time => {
         if (!midiOutput) return;
         
         notes.forEach(({ position, note, amp, duration }) => {
+            // TODO: this doesn't work when t func is applied and quantize is off
             const noteDelta = get(quantize) ? 0 : (position - nextPosition) * cycleDuration;
             
             midiOutput.playNote(note, { 
