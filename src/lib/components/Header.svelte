@@ -12,7 +12,7 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
-        padding: 1rem 2rem;
+        padding: var(--spacer);
         background-color: #000;
         h1 {
             margin: 0;

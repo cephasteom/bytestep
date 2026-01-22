@@ -3,9 +3,11 @@
     import { isPlaying, toggleIsPlaying, isRecording, toggleIsRecording, mapTransportKeys, toggleIsMetronome, isMetronome } from '$lib/stores/transport';
     import SVG from '$lib/components/SVG.svelte';
     import { onMount } from 'svelte';
+    import Input from '$lib/components/Input.svelte';
+    import { bpm } from '$lib/stores/transport';
 
     onMount(() => {
-        // return mapTransportKeys();
+        return mapTransportKeys();
     });
 </script>
 
@@ -27,6 +29,13 @@
     </div>
 
     <div class="transport__item">
+        <Input 
+            bind:value={$bpm} 
+            units="BPM" 
+        />
+    </div>
+
+    <div class="transport__item">
         <Button
             onClick={toggleIsMetronome}
         >
@@ -38,6 +47,7 @@
 <style lang="scss">
     .transport {
         display: flex;
+        align-items: center;
         gap: var(--spacer);
         background-color: var(--black-lighter);
         border-radius: var(--border-radius);
@@ -46,6 +56,11 @@
         &__item {
             padding-right: var(--spacer);
             border-right: 1px solid var(--grey-lighter);
+
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
         }
     }
 </style>

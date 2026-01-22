@@ -1,11 +1,13 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
-import { writable, get } from 'svelte/store';
+import { writable, get, derived } from 'svelte/store';
 import { bars, divisions, divisionToPosition, query, quantize, floorPosition } from './sequencer';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
 import { beepAt } from '$lib/sound/utils';
 
-export const cps = writable(.5);
+export const bpm = writable(120); // bpm
+export const timeSignature = writable<[number, number]>([4, 4]); // [numerator, denominator]
+export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature[0] / 60); // bpm / timesignature denominator (4) / 60
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
 export const startedAt = writable<number | null>(null);

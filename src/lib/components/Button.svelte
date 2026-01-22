@@ -2,10 +2,11 @@
     export let onClick = () => {};
     export let width = 'auto';
     export let label = '';
+    export let fontSize = '1rem';
     export let padding = '0.5rem';
 </script>
 
-<button class="btn" on:click={onClick} style="width: {width}; padding: {padding};">
+<button class="btn" on:click={onClick} style="width: {width}; padding: {padding}; font-size: {fontSize};">
     <slot></slot>
     {#if label}
         <span>{label}</span>
