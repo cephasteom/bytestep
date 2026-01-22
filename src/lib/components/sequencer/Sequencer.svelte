@@ -47,7 +47,13 @@
     $: timeFunction = $timeFunctions[id] || ((t: number, c: number) => t);
 </script>
 
-<section class="sequencer-container" style="border-color: var(--theme-{(id % 5) + 1});">
+<section 
+    class="sequencer" 
+    style="border-color: var(--theme-{(id % 5) + 1});"
+>
+    <header class="sequencer__header">
+        <h2>Sequencer 0{id + 1}</h2>
+    </header>
     <div class="config">
         <div class="midi">
             <div>
@@ -84,61 +90,48 @@
         </Button>
     </div>
 
-    <div class="sequencer">
-        <div class="sequencer__meta">
-            <button on:click={toggle}>
-                {#if collapsed}
-                    <SVG type="down" />
-                {:else}
-                    <SVG type="up" />
-                {/if}
-            </button>
+    <div 
+        class="sequencer__content"
+        bind:this={contentElement}
+    >
+        <div class="sequencer__piano">
+            {#each Array(notes) as _, noteIndex}
+                <div 
+                    class="sequencer__piano-key" 
+                    style="grid-row: {(notes - noteIndex) + 1};"
+                    class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12)}
+                    class:sequencer__piano-key--active={noteIndex === currentNote}
+                >{!(noteIndex % 12) ? `C${Math.floor(noteIndex / 12)}` : ''}</div>
+            {/each}
         </div>
-
+        
         <div 
-            class="sequencer__content"
-            class:sequencer__content--collapsed={collapsed}
-            bind:this={contentElement}
+            class="sequencer__grid"
+            role="application"
+            on:mouseleave={handleMouseLeave}
         >
-            <div class="sequencer__piano">
+            {#each Array(divisions * bars) as _, divisionIndex}
                 {#each Array(notes) as _, noteIndex}
-                    <div 
-                        class="sequencer__piano-key" 
-                        style="grid-row: {(notes - noteIndex) + 1};"
-                        class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12) || collapsed}
-                        class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
-                    >{!(noteIndex % 12) ? `C${Math.floor(noteIndex / 12)}` : ''}</div>
+                    <Cell 
+                        division={divisionIndex}
+                        note={noteIndex}
+                        row={(notes - noteIndex) + 1}
+                        highlighted={!(Math.floor(divisionIndex / 4) % 2)}
+                        on={$data[id].some(n => happensWithin(divisionIndex, n.position) && (collapsed || n.note === noteIndex))}   
+                        active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
+                        handleMouseOver={() => currentNote = noteIndex}
+                        handleMouseDown={handleMouseDown}
+                        handleMouseUp={handleMouseUp}
+                        {mouseIsDown}
+                    />
                 {/each}
-            </div>
-            
-            <div 
-                class="sequencer__grid"
-                role="application"
-                on:mouseleave={handleMouseLeave}
-            >
-                {#each Array(divisions * bars) as _, divisionIndex}
-                    {#each Array(notes) as _, noteIndex}
-                        <Cell 
-                            division={divisionIndex}
-                            note={noteIndex}
-                            row={(notes - noteIndex) + 1}
-                            highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                            on={$data[id].some(n => happensWithin(divisionIndex, n.position) && (collapsed || n.note === noteIndex))}   
-                            active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
-                            handleMouseOver={() => currentNote = noteIndex}
-                            handleMouseDown={handleMouseDown}
-                            handleMouseUp={handleMouseUp}
-                            {mouseIsDown}
-                        />
-                    {/each}
-                {/each}
-            </div>
+            {/each}
         </div>
     </div>
 </section>
 
 <style lang="scss">
-    .sequencer-container {
+    .sequencer {
         margin-bottom: var(--spacer);
         display: flex;
         flex-direction: column;
@@ -147,53 +140,36 @@
         padding: var(--spacer);
         border-radius: var(--border-radius);
         border: 2px solid;
-    }
-    .config {
-        display: flex;
-        justify-content: space-between;
-    }
-    .midi {
-        display: flex;
-        gap: 1rem;
 
-        label {
-            margin-right: 0.5rem;
-            font-size: 0.875rem;
-            color: white;
+        &__header {
+            h2 {
+                margin: 0;
+                color: white;
+            }
         }
+    
+        .config {
+            display: flex;
+            justify-content: space-between;
+        }
+        .midi {
+            display: flex;
+            gap: 1rem;
 
-        select {
-            background: rgba(255, 255, 255, 0.1);
-            border: 0;
-            color: white;
-            padding: 0.25rem;
-            font-size: 0.875rem;
-        }   
-    }
-    .sequencer {
-        display: grid;
-        grid-template-columns: 3rem auto;
+            label {
+                margin-right: 0.5rem;
+                font-size: 0.875rem;
+                color: white;
+            }
 
-        &__meta {
-            width: 3rem;
-            display: grid;
-            grid-template-rows: repeat(notes, .5fr);
-
-            & button {
-                width: 100%;
-                height: 1.5rem;
+            select {
                 background: rgba(255, 255, 255, 0.1);
                 border: 0;
                 color: white;
-                font-size: .75rem;
-                cursor: pointer;
-                text-transform: uppercase;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+                padding: 0.25rem;
+                font-size: 0.875rem;
+            }   
         }
-        
         &__content {
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-left: 0;

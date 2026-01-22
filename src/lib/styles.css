@@ -31,12 +31,7 @@ body {
     width: 100vw;
     overflow: hidden;
     font-family: 'NATS Regular', sans-serif;
-    letter-spacing: 0.125rem;
-}
-
-main {
-    max-width: 1600px;
-    max-height: 1000px;
+    letter-spacing: 0.15rem;
 }
 
 h1,h2,h3,h4,h5,h6,p,label,span {
@@ -44,7 +39,12 @@ h1,h2,h3,h4,h5,h6,p,label,span {
 }
 
 h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1.5rem;
     margin: 0;
 }
 

@@ -14,11 +14,7 @@
         <Button
             onClick={toggleIsPlaying}
         >
-            {#if $isPlaying}
-                <SVG type="stop" />
-            {:else}
-                <SVG type="play" />
-            {/if}
+            <SVG type={$isPlaying ? 'stop' : 'play'} fill={$isPlaying ? "var(--theme-4)" : "var(--theme-1)"} />
         </Button>
     </div>
     
@@ -34,11 +30,7 @@
         <Button
             onClick={toggleIsMetronome}
         >
-            {#if $isMetronome}
-                <SVG type="bell--solid" />
-            {:else}
-                <SVG type="bell" />
-            {/if}
+            <SVG type="metronome" fill={$isMetronome ? "var(--theme-1)" : "white"} />
         </Button>
     </div>
 </div>
