@@ -142,7 +142,7 @@
         padding: 1rem var(--spacer);
         border-radius: var(--border-radius);
         border: 1.5px solid;
-        max-height: 800px;
+        max-height: auto;
         transition: max-height 0.2s ease;
         overflow: scroll;
 
