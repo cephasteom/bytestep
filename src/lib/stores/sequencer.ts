@@ -5,6 +5,14 @@ export const divisions = 16;
 export const bars = 2;
 export const notes = 127 - 36;
 export const activeSequencer = writable<number | null>(0);
+export const armedSequencers = writable<number[]>([]);
+export const toggleArmedSequencer = (index: number) => {
+    armedSequencers.update((arr) => 
+        arr.includes(index)
+            ? arr.filter(i => i !== index)
+            : arr.concat(index)
+    );
+};
 export const quantize = writable(true);
 export const timeFunctions = writable({} as Record<number, (t: number, c: number) => number>);
 

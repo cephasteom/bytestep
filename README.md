@@ -1,6 +1,5 @@
 TODO:
-* Transport
-* sidebar
+* Change divisions when change time signature
 * piano roll
 * make some music / sound design
 

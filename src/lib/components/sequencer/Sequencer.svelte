@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeSequencer, clearSequencer } from "$lib/stores/sequencer";
+    import { activeSequencer, clearSequencer, armedSequencers, toggleArmedSequencer } from "$lib/stores/sequencer";
     import { inputs, outputs, connectInput, connectOutput, connections } from "$lib/stores/midi";
     import { t, c } from '$lib/stores/transport';
     import { data, toggleNote, moveNote, divisions, bars, notes, happensWithin, divisionToPosition, timeFunctions } from "$lib/stores/sequencer";
@@ -51,14 +51,33 @@
     <header 
         class="sequencer__header"
     >
-        <h2>Sequencer 0{id + 1}</h2>
-        <Button
-            onClick={toggle}
-            padding={'0'}
-        >
-            <SVG type={collapsed ? 'down' : 'up'} fill={colour} />
-        </Button>
+        <div>
+            <h2>Sequencer 0{id + 1}</h2>
+            <Button
+                onClick={() => toggleArmedSequencer(id)}
+                padding={'0'}
+            >
+                <SVG 
+                    type={`circle${$armedSequencers.includes(id) ? "--solid" : ""}`} 
+                    fill="var(--theme-5)" 
+                    width={'1rem'}
+                />
+            </Button>
+        </div>
+        <div>
+            <Button
+                onClick={toggle}
+                padding={'0'}
+            >
+                <SVG 
+                    type={collapsed ? 'down' : 'up'} 
+                    fill={colour} 
+                    width={'1rem'}
+                />
+            </Button>
+        </div>
     </header>
+
     <div class="config">
         <div class="midi">
             <div>
@@ -159,6 +178,12 @@
             h2 {
                 margin: 0;
                 color: white;
+            }
+
+            & > div {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
             }
         }
     
