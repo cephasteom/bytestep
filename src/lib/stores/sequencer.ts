@@ -13,6 +13,14 @@ export const toggleArmedSequencer = (index: number) => {
             : arr.concat(index)
     );
 };
+export const mutedSequencers = writable<number[]>([]);
+export const toggleMutedSequencer = (index: number) => {
+    mutedSequencers.update((arr) => 
+        arr.includes(index)
+            ? arr.filter(i => i !== index)
+            : arr.concat(index)
+    );
+};
 export const quantize = writable(true);
 export const timeFunctions = writable({} as Record<number, (t: number, c: number) => number>);
 

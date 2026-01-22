@@ -1,5 +1,9 @@
 <script lang="ts">
-    import { activeSequencer, clearSequencer, armedSequencers, toggleArmedSequencer } from "$lib/stores/sequencer";
+    import { 
+        activeSequencer, clearSequencer, 
+        armedSequencers, toggleArmedSequencer,
+        mutedSequencers, toggleMutedSequencer
+    } from "$lib/stores/sequencer";
     import { inputs, outputs, connectInput, connectOutput, connections } from "$lib/stores/midi";
     import { t, c } from '$lib/stores/transport';
     import { data, toggleNote, moveNote, divisions, bars, notes, happensWithin, divisionToPosition, timeFunctions } from "$lib/stores/sequencer";
@@ -60,11 +64,21 @@
                 <SVG 
                     type={`circle${$armedSequencers.includes(id) ? "--solid" : ""}`} 
                     fill="var(--theme-5)" 
-                    width={'1rem'}
+                    width={'1.25rem'}
                 />
             </Button>
         </div>
         <div>
+            <Button
+                onClick={() => toggleMutedSequencer(id)}
+                padding={'0'}
+            >
+                <SVG 
+                    type="mute"
+                    fill={$mutedSequencers.includes(id) ? colour : 'white'}
+                    width={'1.25rem'}
+                />
+            </Button>
             <Button
                 onClick={toggle}
                 padding={'0'}
@@ -72,7 +86,7 @@
                 <SVG 
                     type={collapsed ? 'down' : 'up'} 
                     fill={colour} 
-                    width={'1rem'}
+                    width={'1.25rem'}
                 />
             </Button>
         </div>
