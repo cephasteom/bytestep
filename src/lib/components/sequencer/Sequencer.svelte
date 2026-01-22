@@ -48,7 +48,9 @@
     class:sequencer--collapsed={collapsed}
     style="border-color: {colour};"
 >
-    <header class="sequencer__header">
+    <header 
+        class="sequencer__header"
+    >
         <h2>Sequencer 0{id + 1}</h2>
         <Button
             onClick={toggle}
@@ -123,6 +125,7 @@
                         handleMouseDown={handleMouseDown}
                         handleMouseUp={handleMouseUp}
                         {mouseIsDown}
+                        colour={colour}
                     />
                 {/each}
             {/each}
@@ -138,7 +141,7 @@
         background-color: var(--black-lighter);
         padding: 1rem var(--spacer);
         border-radius: var(--border-radius);
-        border: 2px solid;
+        border: 1.5px solid;
         max-height: 500px;
         transition: max-height 0.3s ease-in-out;
         overflow: scroll;
@@ -182,9 +185,6 @@
             }   
         }
         &__content {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 0;
-            border-right: 0;
             box-sizing: border-box;
             display: grid;
             grid-template-columns: auto 1fr;
@@ -221,8 +221,7 @@
         }
         &__grid {
             display: grid;
-            gap: 2px;
-            background-color: rgba(255, 255, 255, 0.1);
+            gap: 3px;
             grid-template-columns: repeat(calc(divisions * bars), 1fr);
             grid-template-rows: repeat(notes, .5fr);
             margin-top: -3px;

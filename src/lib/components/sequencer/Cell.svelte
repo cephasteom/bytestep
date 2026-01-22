@@ -9,11 +9,12 @@
     export let handleMouseDown: (division: number, note: number) => void;
     export let handleMouseUp: (division: number, note: number) => void;
     export let mouseIsDown: boolean;
+    export let colour: string = 'var(--theme-1)';
 </script>
 
 <button 
     class="cell" 
-    style="grid-column: {division + 1}; grid-row: {row};"
+    style="grid-column: {division + 1}; grid-row: {row}; background-color: {on ? colour : ''};"
     class:cell--highlighted={highlighted}
     class:cell--on={on}
     class:cell--active={active}
@@ -35,19 +36,20 @@
     cursor: pointer;
     padding: 0;
     position: relative;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--grey-dark);
 
     &--highlighted {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--grey);
     }
     &:hover:not(&--on) {
         background-color: rgba(255, 255, 255, 0.1);
     }
-    &--on {
-        background-color: rgba(255, 255, 255, 0.5);
-    }
     &--active {
         background-color: var(--theme-2);
+    }
+
+    &--on {
+        border-radius: 4px;
     }
 
     &.mouseIsDown:hover {

@@ -4,10 +4,8 @@
     import { onMount } from 'svelte';
     import { loadAllStoreData } from '$lib/stores/localstorage';
     import { initCodeListeners } from '$lib/stores/code';
-    import { sequencers } from '$lib/stores/sequencer';
     
     import Transport from '$lib/components/transport/Transport.svelte';
-    import Editor from '$lib/components/editor/Editor.svelte';
     import Sequencers from '$lib/components/sequencer/Sequencers.svelte';
     import Header from '$lib/components/Header.svelte';
     import Sidebar from '$lib/components/Sidebar.svelte';
@@ -22,7 +20,6 @@
 <main>
     <Header />
     <div class="layout">
-        <!-- <Editor /> -->
         <Sidebar />
         <div class="app">
             <Transport />
