@@ -1,14 +1,16 @@
 :root {
-    --theme-1: #084c61ff;
-    --theme-2: #db504aff;
-    --theme-3: #e3b505ff;
-    --theme-4: #4f6d7aff;
-    --theme-5: #56a3a6ff;
+    --theme-1: Aqua;
+    --theme-2: #FFC300;
+    --theme-3: #FF7383;
+    --theme-4: #FF8419;
+    --theme-5: #D42525;
     --black: #000000;
     --black-lighter: #0D0D0D;
     --grey: #282828;
     --grey-lighter: #363636; 
     --header-height: 64.5px;
+    --spacer: 1.5rem;
+    --border-radius: 12px;
 }
 
 @font-face {

@@ -47,94 +47,107 @@
     $: timeFunction = $timeFunctions[id] || ((t: number, c: number) => t);
 </script>
 
-<div class="config">
-    <div class="midi">
-        <div>
-            <label for="midi-input-{id}">MIDI In</label>
-            <select 
-                id="midi-input-{id}" 
-                on:change={(e) => connectInput(id, (e.target as HTMLInputElement).value)}
-                value={$connections[id]?.input}
-            >
-                <option value={null}>None</option>
-                {#each $inputs as input}
-                    <option value={input}>{input}</option>
-                {/each}
-            </select>
+<section class="sequencer-container" style="border-color: var(--theme-{(id % 5) + 1});">
+    <div class="config">
+        <div class="midi">
+            <div>
+                <label for="midi-input-{id}">MIDI In</label>
+                <select 
+                    id="midi-input-{id}" 
+                    on:change={(e) => connectInput(id, (e.target as HTMLInputElement).value)}
+                    value={$connections[id]?.input}
+                >
+                    <option value={null}>None</option>
+                    {#each $inputs as input}
+                        <option value={input}>{input}</option>
+                    {/each}
+                </select>
+            </div>
+            <div>
+                <label for="midi-output-{id}">MIDI Out</label>
+                <select 
+                    id="midi-output-{id}" 
+                    on:change={(e) => connectOutput(id, (e.target as HTMLInputElement).value)}
+                    value={$connections[id]?.output}
+                >
+                    <option value={null}>None</option>
+                    {#each $outputs as output}
+                        <option value={output}>{output}</option>
+                    {/each}
+                </select>
+            </div>
         </div>
-        <div>
-            <label for="midi-output-{id}">MIDI Out</label>
-            <select 
-                id="midi-output-{id}" 
-                on:change={(e) => connectOutput(id, (e.target as HTMLInputElement).value)}
-                value={$connections[id]?.output}
-            >
-                <option value={null}>None</option>
-                {#each $outputs as output}
-                    <option value={output}>{output}</option>
-                {/each}
-            </select>
-        </div>
-    </div>
-    <Button
-        onClick={() => clearSequencer(id)}
-    >
-        <SVG type="erase" />
-    </Button>
-</div>
-<section class="sequencer">
-    <div class="sequencer__meta">
-        <button on:click={toggle}>
-            {#if collapsed}
-                <SVG type="down" />
-            {:else}
-                <SVG type="up" />
-            {/if}
-        </button>
+        <Button
+            onClick={() => clearSequencer(id)}
+        >
+            <SVG type="erase" />
+        </Button>
     </div>
 
-    <div 
-        class="sequencer__content"
-        class:sequencer__content--collapsed={collapsed}
-        bind:this={contentElement}
-    >
-        <div class="sequencer__piano">
-            {#each Array(notes) as _, noteIndex}
-                <div 
-                    class="sequencer__piano-key" 
-                    style="grid-row: {(notes - noteIndex) + 1};"
-                    class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12) || collapsed}
-                    class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
-                >{!(noteIndex % 12) ? `C${Math.floor(noteIndex / 12)}` : ''}</div>
-            {/each}
+    <div class="sequencer">
+        <div class="sequencer__meta">
+            <button on:click={toggle}>
+                {#if collapsed}
+                    <SVG type="down" />
+                {:else}
+                    <SVG type="up" />
+                {/if}
+            </button>
         </div>
-        
+
         <div 
-            class="sequencer__grid"
-            role="application"
-            on:mouseleave={handleMouseLeave}
+            class="sequencer__content"
+            class:sequencer__content--collapsed={collapsed}
+            bind:this={contentElement}
         >
-            {#each Array(divisions * bars) as _, divisionIndex}
+            <div class="sequencer__piano">
                 {#each Array(notes) as _, noteIndex}
-                    <Cell 
-                        division={divisionIndex}
-                        note={noteIndex}
-                        row={(notes - noteIndex) + 1}
-                        highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                        on={$data[id].some(n => happensWithin(divisionIndex, n.position) && (collapsed || n.note === noteIndex))}   
-                        active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
-                        handleMouseOver={() => currentNote = noteIndex}
-                        handleMouseDown={handleMouseDown}
-                        handleMouseUp={handleMouseUp}
-                        {mouseIsDown}
-                    />
+                    <div 
+                        class="sequencer__piano-key" 
+                        style="grid-row: {(notes - noteIndex) + 1};"
+                        class:sequencer__piano-key--accidental={[1, 3, 6, 8, 10].includes(noteIndex % 12) || collapsed}
+                        class:sequencer__piano-key--active={!collapsed && noteIndex === currentNote}
+                    >{!(noteIndex % 12) ? `C${Math.floor(noteIndex / 12)}` : ''}</div>
                 {/each}
-            {/each}
+            </div>
+            
+            <div 
+                class="sequencer__grid"
+                role="application"
+                on:mouseleave={handleMouseLeave}
+            >
+                {#each Array(divisions * bars) as _, divisionIndex}
+                    {#each Array(notes) as _, noteIndex}
+                        <Cell 
+                            division={divisionIndex}
+                            note={noteIndex}
+                            row={(notes - noteIndex) + 1}
+                            highlighted={!(Math.floor(divisionIndex / 4) % 2)}
+                            on={$data[id].some(n => happensWithin(divisionIndex, n.position) && (collapsed || n.note === noteIndex))}   
+                            active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
+                            handleMouseOver={() => currentNote = noteIndex}
+                            handleMouseDown={handleMouseDown}
+                            handleMouseUp={handleMouseUp}
+                            {mouseIsDown}
+                        />
+                    {/each}
+                {/each}
+            </div>
         </div>
     </div>
 </section>
 
 <style lang="scss">
+    .sequencer-container {
+        margin-bottom: var(--spacer);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background-color: var(--black-lighter);
+        padding: var(--spacer);
+        border-radius: var(--border-radius);
+        border: 2px solid;
+    }
     .config {
         display: flex;
         justify-content: space-between;
@@ -160,7 +173,6 @@
     .sequencer {
         display: grid;
         grid-template-columns: 3rem auto;
-        margin-bottom: 1rem;
 
         &__meta {
             width: 3rem;

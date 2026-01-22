@@ -26,11 +26,7 @@
         <Button
             onClick={toggleIsRecording}
         >
-            {#if $isRecording}
-                <SVG type="circle--solid" />
-            {:else}
-                <SVG type="circle" />
-            {/if}
+            <SVG type={`circle${$isRecording ? "--solid" : ""}`} fill="var(--theme-5)" />
         </Button>
     </div>
 
@@ -50,13 +46,13 @@
 <style lang="scss">
     .transport {
         display: flex;
-        gap: 1.5rem;
+        gap: var(--spacer);
         background-color: var(--black-lighter);
-        border-radius: 15px;
-        padding: .75rem 1.5rem;
+        border-radius: var(--border-radius);
+        padding: calc(var(--spacer) / 2) var(--spacer);
 
         &__item {
-            padding-right: 1.5rem;
+            padding-right: var(--spacer);
             border-right: 1px solid var(--grey-lighter);
         }
     }
