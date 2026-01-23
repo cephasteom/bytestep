@@ -2,7 +2,7 @@ import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
 import { data, addNote, type Note } from "./sequencers";
 import { divisions } from ".";
-import { isRecording, timeToPosition } from "./transport";
+import { isRecording, pos, timeToPosition } from "./transport";
 import { midiToToneOffset } from "$lib/sound/utils";
 
 export const inputs = writable<any[]>([]);
@@ -28,7 +28,7 @@ const addListeners = () => {
         // note on adds note to activeNotes
         input.addListener("noteon", (e) => {
             if(!get(isRecording)) return;
-            const position = timeToPosition(e.timestamp + midiToToneOffset());
+            const position = get(pos);
             activeNotes = [
                 ...activeNotes,
                 {
@@ -45,7 +45,7 @@ const addListeners = () => {
             const noteIndex = activeNotes.findIndex(n => n.note === e.note.number && n.duration === 0);
             if(noteIndex === -1) return;
             const note = activeNotes[noteIndex];
-            const position = timeToPosition(e.timestamp + midiToToneOffset());
+            const position = get(pos);
             const duration = position - note.position;
             // update the note with duration
             activeNotes[noteIndex].duration = duration > 0 ? duration : (1/get(divisions));
