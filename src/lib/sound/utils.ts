@@ -1,4 +1,4 @@
-import { Oscillator, immediate, now } from "tone";
+import { Gain, Oscillator, immediate, now } from "tone";
 
 export function memorize<T>(fn: (arg: T) => any): (arg: T) => any {
     const cache = new Map<T, any>();
@@ -12,10 +12,12 @@ export function memorize<T>(fn: (arg: T) => any): (arg: T) => any {
     };
 }
 
-export function beepAt(time: number) {
+export function beepAt(time: number, amp: number = 1) {
 
     const osc = new Oscillator();
-    osc.toDestination();
+    const gain = new Gain(amp);
+    osc.connect(gain);
+    gain.toDestination();
 
     osc.start(time);
     osc.stop(time + 0.01);

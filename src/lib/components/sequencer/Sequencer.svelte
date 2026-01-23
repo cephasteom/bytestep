@@ -266,6 +266,7 @@
             grid-template-columns: repeat(calc(get(divisions) * bars), 1fr);
             grid-template-rows: repeat(notes, .5fr);
             margin-top: -3px;
+            position: relative;
         }
     }
 </style>

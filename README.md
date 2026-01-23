@@ -1,5 +1,5 @@
 TODO:
-* Timing of capture not correct on different timesignatures
+* progress bar separate from step sequencer timing
 * midi settings
 * make some music / sound design
 * local storage of time sig and bpm

@@ -61,7 +61,7 @@ function createLoop() {
         transport.bpm.setValueAtTime((+get(timeSignature) * 60) * get(cps), time);
 
         // if metronome is enabled, play click sound
-        get(isMetronome) && !(nextT%4) && beepAt(time);
+        get(isMetronome) && !(nextT%4) && beepAt(time, nextT % divs ? 0.25 : 1);
 
         const events = query(nextT);
         const conns = get(connections);
