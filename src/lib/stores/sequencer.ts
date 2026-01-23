@@ -31,11 +31,17 @@ export type Note = {
     duration: number;
 };
 
-export type SequencerData = { [sequencerIndex: number]: Note[] };
+export type SequencerData = { [sequencerIndex: number]: {
+    notes: Note[] } };
 
 export const data = writable<SequencerData>(
     Array.from({ length: sequencers }).reduce<SequencerData>(
-        (acc, _, s) => ({ ...acc, [s]: []}), {})
+        (acc, _, s) => ({ 
+            ...acc, 
+            [s]: { 
+                notes: [] 
+            }
+        }), {})
 );
 
 /**
@@ -50,12 +56,14 @@ export const addNote = (
 ) => {
     data.update((sequencers) => ({
         ...sequencers,
-
-        [sequencer]: sequencers[sequencer]
-            // add note
-            .concat({ position, note, amp, duration })
-            // ensure unique position and note
-            .filter((n, i, arr) => arr.findIndex(o => o.position === n.position && o.note === n.note) === i)
+        [sequencer]: {
+            ...sequencers[sequencer],
+            notes: sequencers[sequencer].notes
+                // add note
+                .concat({ position, note, amp, duration })
+                // ensure unique position and note
+                .filter((n, i, arr) => arr.findIndex(o => o.position === n.position && o.note === n.note) === i)
+        }
     }));
     localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
@@ -76,14 +84,17 @@ export const toggleNote = (
     duration = 1/divisions
 ) => {
     data.update((sequencers) => {
-        const notes = sequencers[sequencer];
+        const notes = sequencers[sequencer].notes;
         const exists = notes.some(n => floorPosition(n.position) === position && n.note === note);
 
         return {
             ...sequencers,
-            [sequencer]: exists
+            [sequencer]: {
+                ...sequencers[sequencer],
+                notes: exists
                 ? notes.filter(n => !(floorPosition(n.position) === position && n.note === note))
                 : notes.concat({ position: position, note, amp, duration })
+            }
         };
     });
     localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
@@ -105,15 +116,18 @@ export const moveNote = (
     toNote: number
 ) => {
     data.update((sequencers) => {
-        const notes = sequencers[sequencer];
+        const notes = sequencers[sequencer].notes;
         const note = notes.find(n => floorPosition(n.position) === fromPosition && n.note === fromNote);
         if (!note) return sequencers;
 
         return {
             ...sequencers,
-            [sequencer]: notes
-                .filter(n => !(floorPosition(n.position) === fromPosition && n.note === fromNote))
-                .concat({ ...note, position: toPosition, note: toNote })
+            [sequencer]: {
+                ...sequencers[sequencer],
+                notes: notes
+                    .filter(n => !(floorPosition(n.position) === fromPosition && n.note === fromNote))
+                    .concat({ ...note, position: toPosition, note: toNote })
+            }
         }
     });
     localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
@@ -126,7 +140,10 @@ export const moveNote = (
 export const clearSequencer = (sequencer: number) => {
     data.update((sequencers) => ({
         ...sequencers,
-        [sequencer]: []
+        [sequencer]: { 
+            ...sequencers[sequencer],
+            notes: [] 
+        }
     }));
     localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
@@ -142,7 +159,7 @@ export const query: (division: number) => { [sequencerIndex: number]: Note[] } =
         const position = divisionToPosition(func(division, Math.floor(division / (divisions * bars))));
         return {
         ...acc,
-        [i]: s.filter((n) => 
+        [i]: s.notes.filter((n) => 
             // note happens on or after position
             n.position >= position 
             // but before next division

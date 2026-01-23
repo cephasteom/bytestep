@@ -1,6 +1,6 @@
 TODO:
 * Change divisions when change time signature
-* piano roll
+* midi settings
 * make some music / sound design
 
 

@@ -152,7 +152,7 @@
                         note={noteIndex}
                         row={(notes - noteIndex) + 1}
                         highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                        on={$data[id].some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}   
+                        on={$data[id].notes.some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}   
                         active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
                         handleMouseOver={() => currentNote = noteIndex}
                         handleMouseDown={handleMouseDown}
