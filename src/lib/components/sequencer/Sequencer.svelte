@@ -1,8 +1,8 @@
 <script lang="ts">
     import { 
         activeSequencer, clearSequencer, 
-        armedSequencers, toggleArmedSequencer,
-        mutedSequencers, toggleMutedSequencer
+        toggleRecord,
+        toggleMute
     } from "$lib/stores/sequencer";
     import { inputs, outputs, connectInput, connectOutput, connections } from "$lib/stores/midi";
     import { t, c } from '$lib/stores/transport';
@@ -45,6 +45,8 @@
     $: collapsed = $activeSequencer !== id;
     $: colour = `var(--theme-${(id % 5) + 1})`;
     $: timeFunction = $timeFunctions[id] || ((t: number, c: number) => t);
+    $: record = $data[id]?.record || false;
+    $: muted = $data[id]?.muted || false;
 </script>
 
 <section 
@@ -58,11 +60,11 @@
         <div>
             <h2>Sequencer 0{id + 1}</h2>
             <Button
-                onClick={() => toggleArmedSequencer(id)}
+                onClick={() => toggleRecord(id)}
                 padding={'0'}
             >
                 <SVG 
-                    type={`circle${$armedSequencers.includes(id) ? "--solid" : ""}`} 
+                    type={`circle${record ? "--solid" : ""}`} 
                     fill="var(--theme-5)" 
                     width={'1.25rem'}
                 />
@@ -70,12 +72,12 @@
         </div>
         <div>
             <Button
-                onClick={() => toggleMutedSequencer(id)}
+                onClick={() => toggleMute(id)}
                 padding={'0'}
             >
                 <SVG 
                     type="mute"
-                    fill={$mutedSequencers.includes(id) ? colour : 'white'}
+                    fill={muted ? colour : 'white'}
                     width={'1.25rem'}
                 />
             </Button>

@@ -1,6 +1,6 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
-import { bars, divisions, divisionToPosition, query, quantize, floorPosition, mutedSequencers } from './sequencer';
+import { bars, divisions, divisionToPosition, query, quantize, floorPosition, data } from './sequencer';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
 import { beepAt } from '$lib/sound/utils';
@@ -60,9 +60,9 @@ new Loop(time => {
     const conns = get(connections);
 
     Object.entries(events).forEach(([sequencerIndex, notes]) => {
-        if(get(mutedSequencers).includes(parseInt(sequencerIndex))) return;
+        if(get(data)[+sequencerIndex]?.muted) return;
 
-        const output = conns[parseInt(sequencerIndex)]?.output;
+        const output = conns[+sequencerIndex]?.output;
         if (!output) return;
 
         const midiOutput = WebMidi.getOutputByName(output);

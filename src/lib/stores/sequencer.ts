@@ -5,22 +5,6 @@ export const divisions = 16;
 export const bars = 2;
 export const notes = 127 - 36;
 export const activeSequencer = writable<number | null>(0);
-export const armedSequencers = writable<number[]>([]);
-export const toggleArmedSequencer = (index: number) => {
-    armedSequencers.update((arr) => 
-        arr.includes(index)
-            ? arr.filter(i => i !== index)
-            : arr.concat(index)
-    );
-};
-export const mutedSequencers = writable<number[]>([]);
-export const toggleMutedSequencer = (index: number) => {
-    mutedSequencers.update((arr) => 
-        arr.includes(index)
-            ? arr.filter(i => i !== index)
-            : arr.concat(index)
-    );
-};
 export const quantize = writable(true);
 export const timeFunctions = writable({} as Record<number, (t: number, c: number) => number>);
 
@@ -32,17 +16,46 @@ export type Note = {
 };
 
 export type SequencerData = { [sequencerIndex: number]: {
-    notes: Note[] } };
+    record: boolean;
+    muted: boolean;
+    notes: Note[] 
+} };
 
 export const data = writable<SequencerData>(
     Array.from({ length: sequencers }).reduce<SequencerData>(
         (acc, _, s) => ({ 
             ...acc, 
             [s]: { 
+                record: false, 
+                muted: false,
                 notes: [] 
             }
         }), {})
 );
+
+export const toggleMute = (sequencer: number) => {
+    data.update((sequencers) => ({
+        ...sequencers,
+        [sequencer]: {
+            ...sequencers[sequencer],
+            muted: !sequencers[sequencer].muted
+        }
+    }));
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
+};
+
+export const toggleRecord = (sequencer: number) => {
+    data.update((sequencers) => ({
+        ...sequencers,
+        [sequencer]: {
+            ...sequencers[sequencer],
+            record: !sequencers[sequencer].record
+        }
+    }));
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
+};
+
+
 
 /**
  * Add a note at position

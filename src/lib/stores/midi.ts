@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
-import { data, addNote, divisions, type Note, floorPosition, armedSequencers } from "./sequencer";
+import { data, addNote, divisions, type Note } from "./sequencer";
 import { isRecording, timeToPosition } from "./transport";
 import { midiToToneOffset } from "$lib/sound/utils";
 
@@ -52,7 +52,7 @@ const addListeners = () => {
             Object.entries(get(connections))
                 .filter(([_, conn]) => conn.input === input.name)
                 .forEach(([sequencer, i]) => {
-                    if(!get(armedSequencers).includes(parseInt(sequencer))) return;
+                    if(!get(data)[+sequencer]?.record) return;
                     addNote(
                         parseInt(sequencer),
                         note.position,
