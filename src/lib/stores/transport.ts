@@ -10,7 +10,7 @@ export const bpm = writable(120); // bpm
 export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature / 60); // bpm / timesignature denominator (4) / 60
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
-export const pos = derived(t, $t => divisionToPosition($t)); // position pointer in cycle (0 - bars)
+export const position = derived(t, $t => divisionToPosition($t)); // position pointer in cycle (0 - bars)
 export const startedAt = writable<number | null>(null);
 export const isPlaying = writable(false);
 export const toggleIsPlaying = () => isPlaying.update(p => !p);

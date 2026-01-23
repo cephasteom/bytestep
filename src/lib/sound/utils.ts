@@ -20,11 +20,3 @@ export function beepAt(time: number) {
     osc.start(time);
     osc.stop(time + 0.01);
 }
-
-const midiToToneOffsetMemorized = memorize<string>(() => {
-    return (immediate() * 1000) - performance.now();
-});
-
-export function midiToToneOffset() {
-    return midiToToneOffsetMemorized('midiToToneOffset');
-}
