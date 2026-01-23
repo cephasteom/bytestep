@@ -3,10 +3,11 @@
         activeSequencer, clearSequencer, 
         toggleRecord,
         toggleMute
-    } from "$lib/stores/sequencer";
+    } from "$lib/stores/sequencers";
     import { inputs, outputs, connectInput, connectOutput, connections } from "$lib/stores/midi";
     import { t, c } from '$lib/stores/transport';
-    import { data, toggleNote, moveNote, divisions, bars, notes, happensWithin, divisionToPosition, timeFunctions } from "$lib/stores/sequencer";
+    import { data, toggleNote, moveNote, notes, happensWithin, divisionToPosition, timeFunctions } from "$lib/stores/sequencers";
+    import { bars, divisions } from "$lib/stores/";
     import Cell from "./Cell.svelte";
     import SVG from "$lib/components/SVG.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -147,7 +148,7 @@
             role="application"
             on:mouseleave={handleMouseLeave}
         >
-            {#each Array(divisions * bars) as _, divisionIndex}
+            {#each Array($divisions * bars) as _, divisionIndex}
                 {#each Array(notes) as _, noteIndex}
                     <Cell 
                         division={divisionIndex}
@@ -155,7 +156,7 @@
                         row={(notes - noteIndex) + 1}
                         highlighted={!(Math.floor(divisionIndex / 4) % 2)}
                         on={$data[id].notes.some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}   
-                        active={timeFunction($t, $c) % (divisions * bars) === divisionIndex}
+                        active={timeFunction($t, $c) % ($divisions * bars) === divisionIndex}
                         handleMouseOver={() => currentNote = noteIndex}
                         handleMouseDown={handleMouseDown}
                         handleMouseUp={handleMouseUp}
@@ -262,7 +263,7 @@
         &__grid {
             display: grid;
             gap: 3px;
-            grid-template-columns: repeat(calc(divisions * bars), 1fr);
+            grid-template-columns: repeat(calc(get(divisions) * bars), 1fr);
             grid-template-rows: repeat(notes, .5fr);
             margin-top: -3px;
         }

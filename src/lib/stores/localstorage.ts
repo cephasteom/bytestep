@@ -1,6 +1,6 @@
 import { WebMidi } from "webmidi";
 import { connections } from "./midi";
-import { data } from "./sequencer";
+import { data } from "./sequencers";
 import { isMetronome } from "./transport";
 
 /**

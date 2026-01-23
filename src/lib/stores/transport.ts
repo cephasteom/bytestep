@@ -1,12 +1,12 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
-import { bars, divisions, divisionToPosition, query, quantize, floorPosition, data } from './sequencer';
+import { timeSignature, bars, divisions } from '.';
+import { divisionToPosition, query, quantize, floorPosition, data } from './sequencers';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
 import { beepAt } from '$lib/sound/utils';
 
 export const bpm = writable(120); // bpm
-export const timeSignature = writable<number>(4); // denominator of time signature
 export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature / 60); // bpm / timesignature denominator (4) / 60
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
@@ -39,7 +39,7 @@ new Loop(time => {
     
     // get time pointer
     const nextT = get(t) + 1;
-    const nextC = Math.floor(nextT / (divisions * bars));
+    const nextC = Math.floor(nextT / (get(divisions) * bars));
     const nextPosition = divisionToPosition(nextT);
     const cycleDuration = (1/get(cps)) * 1000; // in ms
 
@@ -52,6 +52,8 @@ new Loop(time => {
 
     // set transport bpm based on cps store
     transport.bpm.setValueAtTime(240 * get(cps), time);
+    // set time signature
+    transport.timeSignature = [get(timeSignature), 4];
 
     // if metronome is enabled, play click sound
     get(isMetronome) && !(nextT%4) && beepAt(time);
@@ -80,7 +82,7 @@ new Loop(time => {
         });
     });
 
-}, `${divisions}n`).start(0);
+}, `${get(divisions)}n`).start(0);
 
 const play = () => transport.start();
 const stop = () => {

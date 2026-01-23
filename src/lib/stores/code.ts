@@ -1,5 +1,5 @@
 import { isPlaying } from "./transport";
-import { timeFunctions } from "./sequencer";
+import { timeFunctions } from "./sequencers";
 
 export const initCodeListeners = () => {
     window.addEventListener("evaluateCode", (e) => {

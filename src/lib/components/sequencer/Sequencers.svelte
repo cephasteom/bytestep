@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { sequencers } from '$lib/stores/sequencer';
+    import { sequencers } from '$lib/stores/';
     import Sequencer from './Sequencer.svelte';
 </script>
 

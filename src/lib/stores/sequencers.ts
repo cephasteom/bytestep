@@ -1,9 +1,8 @@
 import { get, writable } from "svelte/store";
+import { sequencers, bars, divisions } from ".";
 
-export const sequencers = 4;
-export const divisions = 16;
-export const bars = 2;
 export const notes = 127 - 36;
+// TODO: move the below into the data
 export const activeSequencer = writable<number | null>(0);
 export const quantize = writable(true);
 export const timeFunctions = writable({} as Record<number, (t: number, c: number) => number>);
@@ -94,7 +93,7 @@ export const toggleNote = (
     position: number,
     note: number,
     amp = 0.75,
-    duration = 1/divisions
+    duration = 1/get(divisions)
 ) => {
     data.update((sequencers) => {
         const notes = sequencers[sequencer].notes;
@@ -169,14 +168,14 @@ export const clearSequencer = (sequencer: number) => {
 export const query: (division: number) => { [sequencerIndex: number]: Note[] } = (division: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => {
         const func = get(timeFunctions)[i] || ((t: number) => t);
-        const position = divisionToPosition(func(division, Math.floor(division / (divisions * bars))));
+        const position = divisionToPosition(func(division, Math.floor(division / (get(divisions) * bars))));
         return {
         ...acc,
         [i]: s.notes.filter((n) => 
             // note happens on or after position
             n.position >= position 
             // but before next division
-            && n.position < floorPosition(position) + (1 / divisions))
+            && n.position < floorPosition(position) + (1 / get(divisions)))
     }}, {});
 };
 
@@ -187,8 +186,8 @@ export const query: (division: number) => { [sequencerIndex: number]: Note[] } =
  * @returns 
  */
 export const happensWithin = (division: number, position: number) => {
-    const div = division % (divisions * bars);
-    const pos = Math.floor((position % bars) * divisions);
+    const div = division % (get(divisions) * bars);
+    const pos = Math.floor((position % bars) * get(divisions));
     return div === pos;
 };
 
@@ -198,12 +197,12 @@ export const happensWithin = (division: number, position: number) => {
  * @returns 
  */
 export const divisionToPosition = (division: number) => {
-    return ((division % (divisions * bars)) / divisions);
+    return ((division % (get(divisions) * bars)) / get(divisions));
 }
 
 /**
  * Floor position to nearest division, e.g. 0.51223 becomes 0.5
  */
 export function floorPosition(position: number) {
-    return Math.floor(position * divisions) / divisions
+    return Math.floor(position * get(divisions)) / get(divisions)
 }

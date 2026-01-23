@@ -5,8 +5,9 @@
         isRecording, toggleIsRecording, 
         isMetronome, toggleIsMetronome,
         mapTransportKeys, 
-        bpm, timeSignature
+        bpm
     } from '$lib/stores/transport';
+    import { timeSignature } from '$lib/stores/';
     import SVG from '$lib/components/SVG.svelte';
     import { onMount } from 'svelte';
     import Input from '$lib/components/Input.svelte';
