@@ -16,7 +16,8 @@ export type SequencerData = { [sequencerIndex: number]: {
     record: boolean;
     muted: boolean;
     notes: Note[],
-    time: string
+    bytebeat: string,
+    hasError?: boolean
 } };
 
 export const data = writable<SequencerData>(
@@ -28,7 +29,7 @@ export const data = writable<SequencerData>(
                 muted: false,
                 quantize: true,
                 notes: [],
-                time: "t"
+                bytebeat: "t"
             }
         }), {})
 );
@@ -50,6 +51,26 @@ export const toggleRecord = (sequencer: number) => {
         [sequencer]: {
             ...sequencers[sequencer],
             record: !sequencers[sequencer].record
+        }
+    }));
+    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
+};
+
+export const setBytebeat = (sequencer: number, bytebeat: string) => {
+    let hasError = false;
+    try {
+        new Function("t", `return ${bytebeat}`);
+    } catch (e) {
+        bytebeat = get(data)[sequencer].bytebeat;
+        hasError = true;
+    }
+
+    data.update((sequencers) => ({
+        ...sequencers,
+        [sequencer]: {
+            ...sequencers[sequencer],
+            bytebeat,
+            hasError
         }
     }));
     localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));

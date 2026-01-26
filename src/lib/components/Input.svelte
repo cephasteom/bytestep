@@ -1,7 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+
+    export let onInput: (value: string) => void;
     export let value: number | string;
     export let units: string = '';
+    export let hasError: boolean = false;
     
     let inputElement: HTMLInputElement;
     let mirrorSpan: HTMLSpanElement;
@@ -15,16 +18,22 @@
         inputElement.style.width = `${width}px`;
     }
 
-    onMount(setSize);
+    function handleOnInput(e: Event) {
+        onInput((e.target as HTMLInputElement).value);
+        setSize();
+    }
+
+    onMount(() => setTimeout(setSize, 10));
 </script>
 
 <div 
     class="input"
     bind:this={container}
+    class:input--error={hasError}
 >
     <input 
         bind:this={inputElement} 
-        on:input={setSize}
+        on:input={handleOnInput}
         bind:value 
         class="input__input"
     />
@@ -40,6 +49,20 @@
 <style lang="scss">
     .input {
         display: inline-grid;
+        box-sizing: border-box;
+        border-radius: 4px;
+        position: relative;
+
+        &--error {
+            &::before {
+                content: '!';
+                position: absolute;
+                font-size: 1.5rem;
+                left: -10px;
+                right: -4px;
+                color: var(--theme-5);
+            }
+        }
 
         &__input, &__mirror {
             grid-area: 1 / 1;
@@ -64,7 +87,9 @@
             white-space: pre;
             padding: 0 0.25rem;
         }
+
     }
+    
 
     .units {
         color: white;

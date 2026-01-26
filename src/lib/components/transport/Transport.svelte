@@ -13,7 +13,7 @@
     import Input from '$lib/components/Input.svelte';
 
     onMount(() => {
-        return mapTransportKeys();
+        // return mapTransportKeys();
     });
 </script>
 

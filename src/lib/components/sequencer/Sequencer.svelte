@@ -3,6 +3,7 @@
         activeSequencer, clearSequencer, 
         toggleRecord,
         toggleMute,
+        setBytebeat,
     } from "$lib/stores/sequencers";
     import { openMidiSettings } from "$lib/stores/midi";
     import { t, c } from '$lib/stores/transport';
@@ -12,6 +13,7 @@
     import SVG from "$lib/components/SVG.svelte";
     import Button from "$lib/components/Button.svelte";
     import { onMount } from "svelte";
+    import Input from "$lib/components/Input.svelte";
 
     export let id: number;
     let currentNote = -1;
@@ -53,6 +55,7 @@
     $: colour = `var(--theme-${(id % 5) + 1})`;
     $: record = $data[id]?.record || false;
     $: muted = $data[id]?.muted || false;
+    $: bytebeat = $data[id]?.bytebeat || 't';
     
     onMount(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -129,6 +132,11 @@
             </Button>
         </div>
         <div>
+            <Input
+                value={bytebeat}
+                onInput={(value) => setBytebeat(id, value)}
+                hasError={$data[id]?.hasError}
+            />
             <Button
                 onClick={toggle}
                 padding={'0'}
@@ -195,7 +203,7 @@
         overflow: scroll;
 
         &--collapsed {
-            max-height: 23px; // header height;
+            max-height: 27px; // header height;
             overflow: hidden;
         }
 
