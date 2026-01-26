@@ -4,7 +4,7 @@ import { timeSignature, bars, divisions } from '.';
 import { divisionToPosition, query, floorPosition, data } from './sequencers';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
-import { beepAt } from '$lib/sound/utils';
+import { beepAt, mod } from '$lib/sound/utils';
 
 export const bpm = writable(120); // bpm
 export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature / 60); // bpm / timesignature denominator (4) / 60
@@ -24,18 +24,19 @@ export const toggleIsMetronome = () => {
     localStorage.setItem("bs.isMetronome", JSON.stringify(get(isMetronome)));
 };
 
-export const sequencerTs = derived([t, c, data], ([$t, $c, $data]) => {
+export const sequencerTs = derived([t, c, divisions, data], ([$t, $c, $divisions, $data]) => {
     const result: { [sequencerIndex: number]: number } = {};
     Object.entries($data).forEach(([sequencerIndex, sequencerData]) => {
         const bytebeat = sequencerData.bytebeat || 't';
         try {
             const func = eval(`(function(t, c) { return ${bytebeat}; })`);
             const value = func($t, $c);
-            result[+sequencerIndex] = Number.isFinite(value) ? value : 0;
+            result[+sequencerIndex] = mod(Number.isFinite(value) ? value : 0, $divisions * bars);
         } catch {
-            result[+sequencerIndex] = 0;
+            result[+sequencerIndex] = $t;
         }
     });
+    
     return result;
 });
 
