@@ -38,6 +38,7 @@
         <Input 
             bind:value={$bpm} 
             units="BPM" 
+            type="number"
         />
     </div>
 
@@ -45,6 +46,7 @@
         <Input 
             bind:value={$timeSignature} 
             units=" / 4" 
+            type="number"
         />
     </div>
 

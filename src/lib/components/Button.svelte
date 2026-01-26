@@ -25,7 +25,6 @@
         background-color: transparent;
         color: white;
         border-radius: 3px;
-        opacity: 0.8;
         display: flex;
         flex-direction: column;
         align-items: center;

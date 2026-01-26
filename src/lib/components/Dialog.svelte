@@ -39,6 +39,7 @@
         color: white;
         padding: 0;
         max-width: min(90vw, 40rem);
+        
 
         & > header {
             background-color: var(--black-lighter);
@@ -50,9 +51,10 @@
 
         & .content {
             padding: 1rem var(--spacer);
+            opacity: var(--app-opacity, 1);
         }
         &::backdrop {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.25);
         }
     }
 </style>

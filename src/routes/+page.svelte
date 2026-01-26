@@ -18,7 +18,6 @@
     });
 </script>
 
-
 <main>
     <!-- Modals -->
     <About />

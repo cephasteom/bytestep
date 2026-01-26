@@ -1,23 +1,25 @@
 <script lang="ts">
-    import Button from '$lib/components/Button.svelte';
     import { onMount } from 'svelte';
     export let value: number | string;
     export let units: string = '';
+    export let type: 'text' | 'number' = 'text';
     
-    let showInput = false;
+    let inputElement: HTMLInputElement;
+    let mirrorSpan: HTMLSpanElement;
+    
     let container: HTMLElement;
-    let width: number = 0;
-    let height: number = 0;
-
-    function handleKeydown(event: KeyboardEvent) {
-        (event.key === 'Enter' || event.key === 'Escape') && (showInput = false);
+    
+    function setSize() {
+        if(!mirrorSpan || !inputElement) return;
+        mirrorSpan.textContent = `${value}`;
+        const width = mirrorSpan.offsetWidth;
+        inputElement.style.width = `${width}px`;
     }
 
     onMount(() => {
         // wait for layout to settle
         setTimeout(() => {
-            width = container.getBoundingClientRect().width;
-            height = container.getBoundingClientRect().height;
+            setSize();
         }, 200);
     });
 </script>
@@ -26,44 +28,52 @@
     class="input"
     bind:this={container}
 >
-    {#if showInput}
-        <input 
-            bind:value 
-            type="text" 
-            on:keydown={handleKeydown}
-            style="width: {width}px; height: {height}px;"
-        />
-    {:else}
-        <Button 
-            onClick={() => {
-                showInput = true
-                // focus the input after it appears
-                setTimeout(() => {
-                    const inputElement = container.querySelector('input');
-                    inputElement?.focus();
-                }, 0);
-            }}
-            label={`${value} ${units}`}
-            fontSize="1.5rem"
-        >
-        </Button>
-    {/if}
+    <input 
+        bind:this={inputElement} 
+        on:input={setSize}
+        bind:value 
+        class="input__input"
+    />
+    <span 
+        class="input__mirror" 
+        bind:this={mirrorSpan}
+    ></span>
 </div>
+{#if units}
+    <span class="units">{units}</span>
+{/if}
 
 <style lang="scss">
-    input {
-        font-size: 1.5rem;
-        border: none;
-        border-radius: 3px;
-        box-sizing: border-box;
-        text-align: center;
-        width: 100%;
-        background-color: var(--black-lighter);
-        color: white;
+    .input {
+        display: inline-grid;
 
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--theme-1);
+        &__input, &__mirror {
+            grid-area: 1 / 1;
+            font: inherit;
+            padding: 0 0.25rem;
         }
+
+        &__input {
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 3px;
+            text-align: center;
+            background-color: var(--black-lighter);
+            color: white;
+            width: 1ch;
+            overflow: visible;
+            padding: 0;
+        }
+
+        &__mirror {
+            visibility: hidden;
+            white-space: pre;
+            padding: 0 0.25rem;
+        }
+    }
+
+    .units {
+        color: white;
+        font-size: 1.5rem;
     }
 </style>
