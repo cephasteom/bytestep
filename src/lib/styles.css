@@ -32,6 +32,7 @@ body {
     background-color: var(--grey);
     width: 100vw;
     font-family: 'NATS Regular', sans-serif;
+    font-size: 1.25rem;
 }
 
 h1,h2,h3,h4,h5,h6,p,label,span {
@@ -50,12 +51,18 @@ h2 {
     margin: 0;
 }
 
-p {
-    font-size: 1.125rem;
+code {
+    font-size: 1rem;
 }
 
 a {
     color: white;
+}
+
+ul {
+    padding-left: 1rem;
+    list-style: none;
+    font-size: 1.25rem;
 }
 
 .prism-code-editor {

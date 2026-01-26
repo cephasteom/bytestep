@@ -7,15 +7,27 @@
     bind:open={$aboutOpen}
     title="About"
 >
-    <p>ByteStep is a web-based MIDI sequencer for recording and transforming patterns. It aims to combine the convenience of a DAW with the flexibility of code.</p>
-    <p>Record or input a sequence of notes. Then, transform the sequence by manipulating time using a bytebeat function.</p>
-    <p>© 2026 Peter Thomas | <a href="https://cephasteom.co.uk">cephasteom.co.uk</a></p>
+    <p>ByteStep combines the convenience of a DAW with the flexibility of live coding.</p>
+    <p>Record or input a sequence of notes, then transform time using a JavaScript expression. For example, <span>t</span> plays the sequence normally, <span>t * 2</span> plays it at double speed, or <span>32 - t</span> plays it backwards.</p>
+    <p>Available variables are <span>t</span> the current time step and <span>c</span> the current cycle.</p>
+    
+    <p>Visual designs by Ellie Hobbs @ <a href="https://lunar.build">lunar.build</a>.</p>
+    <p>© {new Date().getFullYear()} Peter Thomas | <a href="https://cephasteom.co.uk">cephasteom.co.uk</a>.</p>
 </Dialog>
 
 <style lang="scss">
-    p {
+    p, span {
         margin-top: 0;
         text-transform: none;
+    }
 
+    span {
+        background-color: white;
+        display: inline-block;
+        line-height: 1;
+        color: black;
+        padding: 0 .5rem;
+        text-align: center;
+        border-radius: var(--border-radius);
     }
 </style>
