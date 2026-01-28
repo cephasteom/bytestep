@@ -1,9 +1,10 @@
 TODO:
-* bytebeat string - in the data storage as a string, then evalled as a function
-* local storage of time sig, bpm, and bytebeat string
+* local storage of time sig, bpm
 * bug: when loops round, sustained notes are cut short
 * amp and duration interface
 * make some music / sound design
+* bytebeat eval on enter
+* can we move the playnote logic into the midi.ts file, it's own loop which should be sync'd?
 
 
 # sv

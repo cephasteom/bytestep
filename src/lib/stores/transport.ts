@@ -4,51 +4,53 @@ import { timeSignature, bars, divisions } from '.';
 import { divisionToPosition, query, floorPosition, data } from './sequencers';
 import { connections } from './midi';
 import { WebMidi } from 'webmidi';
-import { beepAt, mod } from '$lib/sound/utils';
+import { beepAt, evalBytebeat, mod } from '$lib/sound/utils';
+import { persist } from './localstorage';
 
+/**
+ * Global transport stores
+ */
 export const bpm = writable(120); // bpm
 export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature / 60); // bpm / timesignature denominator (4) / 60
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
 export const position = derived(t, $t => divisionToPosition($t)); // position pointer in cycle (0 - bars)
 export const startedAt = writable<number | null>(null);
-export const isPlaying = writable(false);
-export const toggleIsPlaying = () => isPlaying.update(p => !p);
 
+/**
+ * Recording enabled/disabled
+ */
 export const isRecording = writable(false);
 export const toggleIsRecording = () => isRecording.update(r => !r);
 
-export const isMetronome = writable(false);
-export const toggleIsMetronome = () => {
-    isMetronome.update(m => !m);
-    localStorage.setItem("bs.isMetronome", JSON.stringify(get(isMetronome)));
-};
-
-export const sequencerTs = derived([t, c, divisions, data], ([$t, $c, $divisions, $data]) => {
-    const result: { [sequencerIndex: number]: number } = {};
-    Object.entries($data).forEach(([sequencerIndex, sequencerData]) => {
-        const bytebeat = sequencerData.bytebeat || 't';
-        try {
-            const func = eval(`(function(t, c) { return ${bytebeat}; })`);
-            const value = func($t, $c);
-            result[+sequencerIndex] = mod(Number.isFinite(value) ? value : 0, $divisions * bars);
-        } catch {
-            result[+sequencerIndex] = $t;
-        }
-    });
-    
-    return result;
-});
-
-const transport = getTransport()
-const draw = getDraw();
-
+/**
+ * Playing enabled/disabled
+ */
+export const isPlaying = writable(false);
+export const toggleIsPlaying = () => isPlaying.update(p => !p);
 isPlaying.subscribe(playing => {
     playing
         ? startedAt.set((immediate()) * 1000)
         : isRecording.set(false);
 });
 isRecording.subscribe(recording => recording && isPlaying.set(true));
+
+/**
+ * Metronome enabled/disabled
+ */
+export const isMetronome = writable(false);
+isMetronome.subscribe(persist('bs.isMetronome'));
+export const toggleIsMetronome = () => isMetronome.update(m => !m);
+
+export const sequencerTs = derived([t, c, divisions, data], ([$t, $c, $divisions, $data]) => {
+    return Object.entries($data).reduce((result, [sequencerIndex, sequencerData]) => ({
+        ...result,
+        [+sequencerIndex]: mod(evalBytebeat(sequencerData.bytebeat || 't', $t, $c), $divisions * bars)
+    }), {});
+});
+
+const transport = getTransport()
+const draw = getDraw();
 
 let loop: Loop;
 function createLoop() {

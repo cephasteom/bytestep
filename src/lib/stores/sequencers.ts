@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store";
 import { sequencers, bars, divisions } from ".";
-import { isValidBytebeat } from "$lib/sound/utils";
+import { evalBytebeat, isValidBytebeat, mod } from "$lib/sound/utils";
+import { persist } from "./localstorage";
 
 export const notes = 127 - 36;
 export const activeSequencer = writable<number | null>(0);
@@ -35,6 +36,8 @@ export const data = writable<SequencerData>(
         }), {})
 );
 
+data.subscribe(persist('bs.sequencerData'));
+
 export const toggleMute = (sequencer: number) => {
     data.update((sequencers) => ({
         ...sequencers,
@@ -43,7 +46,6 @@ export const toggleMute = (sequencer: number) => {
             muted: !sequencers[sequencer].muted
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 export const toggleRecord = (sequencer: number) => {
@@ -54,7 +56,6 @@ export const toggleRecord = (sequencer: number) => {
             record: !sequencers[sequencer].record
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 export const setBytebeat = (sequencer: number, bytebeat: string) => {
@@ -68,7 +69,6 @@ export const setBytebeat = (sequencer: number, bytebeat: string) => {
             hasError: !isValid
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -92,7 +92,6 @@ export const addNote = (
                 .filter((n, i, arr) => arr.findIndex(o => o.position === n.position && o.note === n.note) === i)
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -111,7 +110,6 @@ export const removeNote = (
                 .filter(n => !(floorPosition(n.position) === position && n.note === note))
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -144,7 +142,6 @@ export const moveNote = (
             }
         }
     });
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -159,7 +156,6 @@ export const clearSequencer = (sequencer: number) => {
             notes: [] 
         }
     }));
-    localStorage.setItem("bs.sequencerData", JSON.stringify(get(data)));
 };
 
 /**
@@ -169,7 +165,8 @@ export const clearSequencer = (sequencer: number) => {
  */
 export const query: (division: number) => { [sequencerIndex: number]: Note[] } = (division: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => {
-        const position = divisionToPosition(division);
+        const div = mod(evalBytebeat(s.bytebeat || 't', division, Math.floor(division / (get(divisions) * bars))), get(divisions) * bars);
+        const position = divisionToPosition(div);
         return {
         ...acc,
         [i]: s.notes.filter((n) => 

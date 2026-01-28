@@ -47,3 +47,12 @@ export function isValidBytebeat(expr: string): boolean {
 export function mod(n: number, m: number): number {
     return ((n % m) + m) % m;
 }
+
+export function evalBytebeat(expr: string, t: number, c: number): number {
+    try {
+        const fn = new Function('t', 'c', `return ${expr};`);
+        return fn(t, c);
+    } catch {
+        return t; // fallback to a simple output
+    }
+}

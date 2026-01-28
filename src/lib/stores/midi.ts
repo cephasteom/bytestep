@@ -3,6 +3,7 @@ import { WebMidi } from "webmidi";
 import { data, addNote, type Note } from "./sequencers";
 import { divisions } from ".";
 import { isRecording, position } from "./transport";
+import { persist } from "./localstorage";
 
 /**
  * MIDI inputs and outputs, and connections to sequencers
@@ -22,6 +23,7 @@ export const connections = writable<{[sequencer: number | string]: {
             [key]: { input: null, inputChannel: null, output: null, outputChannel: null } 
         }), {})
 );
+connections.subscribe(persist('bs.midiConnections'));
 
 /**
  * MIDI Settings Modal
@@ -110,8 +112,6 @@ const connect = (type: "input" | "output", sequencer: number | string, device: s
             [type]: device
         }
     }));
-    // persist to localstorage
-    localStorage.setItem("bs.midiConnections", JSON.stringify(get(connections)));
 };
 
 const setChannel = (type: "input" | "output", sequencer: number | string, channel: number | null) => {
@@ -122,8 +122,6 @@ const setChannel = (type: "input" | "output", sequencer: number | string, channe
             [`${type}Channel`]: channel
         }
     }));
-    // persist to localstorage
-    localStorage.setItem("bs.midiConnections", JSON.stringify(get(connections)));
 }
 
 export const connectInput = (sequencer: number | string, inputName: string | null) => {
@@ -131,14 +129,17 @@ export const connectInput = (sequencer: number | string, inputName: string | nul
     addListeners();
 };
 
-export const connectOutput = (sequencer: number | string, outputName: string | null) => {
-    connect("output", sequencer, outputName);
-};
+export const connectOutput = (
+    sequencer: number | string, 
+    outputName: string | null
+) => connect("output", sequencer, outputName);
 
-export const setInputChannel = (sequencer: number | string, channel: number | null) => {
-    setChannel("input", sequencer, channel);
-};
+export const setInputChannel = (
+    sequencer: number | string, 
+    channel: number | null
+) => setChannel("input", sequencer, channel);
 
-export const setOutputChannel = (sequencer: number | string, channel: number | null) => {
-    setChannel("output", sequencer, channel);
-};
+export const setOutputChannel = (
+    sequencer: number | string, 
+    channel: number | null
+) => setChannel("output", sequencer, channel);
