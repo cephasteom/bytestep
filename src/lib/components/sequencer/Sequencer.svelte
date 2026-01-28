@@ -153,6 +153,20 @@
         </div>
     </header>
 
+    <div class="sequencer__progress">
+        {#each Array($divisions * bars) as _, divisionIndex}
+            <Cell 
+                division={divisionIndex}
+                note={0}
+                row={0}
+                highlighted={!(Math.floor(divisionIndex / 4) % 2)}
+                active={$sequencerTs[id] !== -1 && $sequencerTs[id] % ($divisions * bars) === divisionIndex}
+                colour={colour}
+                height="0.5rem"
+            />
+        {/each}
+    </div>
+
     <div class="sequencer__content">
         <div class="sequencer__piano">
             {#each Array(notes) as _, noteIndex}
@@ -206,8 +220,12 @@
         overflow: scroll;
 
         &--collapsed {
-            max-height: 27px; // header height;
+            max-height: 60px; // header height;
             overflow: hidden;
+
+            .sequencer__progress {
+                display: grid;
+            }
         }
 
         &__header {
@@ -230,6 +248,14 @@
                     gap: 1rem;
                 }
             }
+        }
+
+        &__progress {
+            display: none;
+            grid-template-columns: repeat(calc(get(divisions) * bars), 1fr);
+            grid-template-rows: 1fr;
+            gap: 3px;
+            position: relative;
         }
 
         &__content {

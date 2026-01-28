@@ -3,19 +3,20 @@
     export let division: number;
     export let note: number;
     export let highlighted: boolean;
-    export let on: boolean;
-    export let active: boolean;
-    export let handleMouseOver: () => void;
-    export let handleMouseDown: (division: number, note: number) => void;
-    export let handleMouseUp: (division: number, note: number) => void;
-    export let handleMouseFocus: (division: number, note: number) => void;
-    export let mouseIsDown: boolean;
+    export let on: boolean = false;
+    export let active: boolean = false;
+    export let handleMouseOver: () => void = () => {};
+    export let handleMouseDown: (division: number, note: number) => void = () => {};
+    export let handleMouseUp: (division: number, note: number) => void = () => {};
+    export let handleMouseFocus: (division: number, note: number) => void = () => {};
+    export let mouseIsDown: boolean = false;
     export let colour: string = 'var(--theme-1)';
+    export let height: string = '1.5rem';
 </script>
 
 <button 
     class="cell" 
-    style="grid-column: {division + 1}; grid-row: {row}; background-color: {on || active ? colour : ''};"
+    style="grid-column: {division + 1}; grid-row: {row}; background-color: {on || active ? colour : ''}; height: {height};"
     class:cell--highlighted={highlighted}
     class:cell--on={on}
     class:cell--active={active}
@@ -32,7 +33,6 @@
 .cell {
     border: 0;
     box-sizing: border-box;
-    height: 1.5rem;
     background-color: transparent;
     cursor: pointer;
     padding: 0;

@@ -2,6 +2,8 @@ TODO:
 * bug: when recording loops round, sustained notes are cut short
 * bug: handle note off issue when repeating notes
 * amp, duration, cc interface
+* opacity of note based on duration
+* settings modal - with interference and cellular automata
 * make some music / sound design
 * interference
 * visual feedback on sequencer position when collapsed
