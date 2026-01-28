@@ -1,9 +1,9 @@
 TODO:
 * bug: when recording loops round, sustained notes are cut short
+* bug: handle note off issue when repeating notes
 * amp, duration, cc interface
 * make some music / sound design
-* can we move the playnote logic into the midi.ts file, it's own loop which should be sync'd?
-
+* interference
 
 # sv
 

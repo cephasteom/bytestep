@@ -1,9 +1,10 @@
 import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
-import { data, addNote, type Note } from "./sequencers";
+import { data, addNote, type Note, query, divisionToPosition } from "./sequencers";
 import { divisions } from ".";
-import { isRecording, position } from "./transport";
+import { t, isRecording, position, cps } from "./transport";
 import { persist } from "./localstorage";
+import { immediate, Loop } from "tone";
 
 /**
  * MIDI inputs and outputs, and connections to sequencers
@@ -143,3 +144,49 @@ export const setOutputChannel = (
     sequencer: number | string, 
     channel: number | null
 ) => setChannel("output", sequencer, channel);
+
+/**
+ * Handle MIDI output on transport loop
+ */
+let loop: Loop;
+function createLoop() {
+    loop && loop.dispose();
+    
+    loop = new Loop(time => {
+        const delta = time - immediate()
+        const nextT = get(t) + 1;
+
+        const nextPosition = divisionToPosition(nextT);
+        const cycleDuration = (1/get(cps)) * 1000; // in ms
+
+        const events = query(nextT);
+        const conns = get(connections);
+
+        Object.entries(events).forEach(([sequencerIndex, notes]) => {
+            if(get(data)[+sequencerIndex]?.muted) return;
+            const quantize = get(data)[+sequencerIndex]?.quantize ?? true;
+
+            const output = conns[+sequencerIndex]?.output;
+            const channel = conns[+sequencerIndex]?.outputChannel || 'all';
+            if (!output) return;
+
+            const midiOutput = WebMidi.getOutputByName(output);
+            if (!midiOutput) return;
+            
+            notes.forEach(({ position, note, amp, duration }) => {
+                const noteDelta = quantize ? 0 : (position - nextPosition) * cycleDuration;
+                let options: {[key: string]: any} = { 
+                    attack: amp, 
+                    duration: duration * cycleDuration, 
+                    time: `+${(delta * 1000) + (noteDelta)}`,
+                }
+
+                channel !== 'all' && (options.channels = channel as number + 1);
+                
+                midiOutput.playNote(note, options);
+            });
+        });
+
+    }, `${get(divisions)}n`).start(0);
+}
+divisions.subscribe(() => createLoop());

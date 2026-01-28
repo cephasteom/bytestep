@@ -1,9 +1,7 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
 import { timeSignature, bars, divisions } from '.';
-import { divisionToPosition, query, floorPosition, data, type SequencerData } from './sequencers';
-import { connections } from './midi';
-import { WebMidi } from 'webmidi';
+import { divisionToPosition, floorPosition, data } from './sequencers';
 import { beepAt, evalBytebeat, mod } from '$lib/sound/utils';
 import { persist } from './localstorage';
 
@@ -53,22 +51,19 @@ export const sequencerTs = derived([t, c, divisions, data], ([$t, $c, $divisions
     }), {} as Record<number, number>);
 });
 
+/**
+ * Transport Loop
+ */
 const transport = getTransport()
 const draw = getDraw();
-
 let loop: Loop;
 function createLoop() {
     loop && loop.dispose();
 
     loop = new Loop(time => {
-        const delta = time - immediate()
-        const divs = get(divisions);
-        
         // get time pointer
         const nextT = get(t) + 1;
-        const nextC = Math.floor(nextT / (divs * bars));
-        const nextPosition = divisionToPosition(nextT);
-        const cycleDuration = (1/get(cps)) * 1000; // in ms
+        const nextC = Math.floor(nextT / (get(divisions) * bars));
 
         // advance time pointers at scheduled time
         draw.schedule(() => {
@@ -83,37 +78,7 @@ function createLoop() {
         transport.bpm.setValueAtTime((+get(timeSignature) * 60) * get(cps), time);
 
         // if metronome is enabled, play click sound
-        get(isMetronome) && !(nextT%4) && beepAt(time, nextT % divs ? 0.25 : 1);
-
-        const events = query(nextT);
-        const conns = get(connections);
-
-        Object.entries(events).forEach(([sequencerIndex, notes]) => {
-            if(get(data)[+sequencerIndex]?.muted) return;
-            const quantize = get(data)[+sequencerIndex]?.quantize ?? true;
-
-            const output = conns[+sequencerIndex]?.output;
-            const channel = conns[+sequencerIndex]?.outputChannel || 'all';
-            if (!output) return;
-
-            const midiOutput = WebMidi.getOutputByName(output);
-            if (!midiOutput) return;
-            
-            notes.forEach(({ position, note, amp, duration }) => {
-                // TODO: this doesn't work when t func is applied and quantize is off
-                const noteDelta = quantize ? 0 : (position - nextPosition) * cycleDuration;
-                let options: {[key: string]: any} = { 
-                    attack: amp, 
-                    duration: duration * cycleDuration, 
-                    time: `+${(delta * 1000) + (noteDelta)}`,
-                }
-
-                channel !== 'all' && (options.channels = channel as number + 1);
-                
-                midiOutput.playNote(note, options);
-            });
-        });
-
+        get(isMetronome) && !(nextT%4) && beepAt(time, nextT % get(divisions) ? 0.25 : 1);
     }, `${get(divisions)}n`).start(0);
 }
 divisions.subscribe(() => createLoop());
