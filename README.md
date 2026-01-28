@@ -1,11 +1,18 @@
 TODO:
 Musts:
-* bug: when recording loops round, sustained notes are cut short
 * make some music / sound design
-* cc interface
+* bug: when recording loops round, sustained notes are cut short
+* volume fader - pushes all notes eventually to an amp of 1
+* more bars please, perhaps with the default set to loop at 2?
 
 Nice to haves once proven useful:
-* settings modal - with interference and cellular automata
+* sequencer settings modal 
+    - number of bars
+    - quantize division and pitch
+    - interference 
+    - random - generation and riffing on what's there
+    - cellular automata
+* cc interface
 * sync to DAW
 * transpose up and down octave
 

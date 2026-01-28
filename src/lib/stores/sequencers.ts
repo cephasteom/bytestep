@@ -54,18 +54,6 @@ export const setGlobalBytebeat = (bytebeat: string) => {
         bytebeat,
         hasError: !isValid
     });
-
-    // if valid, replicate to all sequencers
-    if(isValid) data.update((sequencers) => {
-        const updatedSequencers: SequencerData = {};
-        for (const [index, sequencer] of Object.entries(sequencers)) {
-            updatedSequencers[Number(index)] = {
-                ...sequencer,
-                bytebeat
-            };
-        }
-        return updatedSequencers;
-    });
 }
 
 export const toggleMute = (sequencer: number) => {
@@ -235,7 +223,9 @@ export const updateNoteDuration = (
  */
 export const query: (division: number) => { [sequencerIndex: number]: Note[] } = (division: number) => {
     return Object.values(get(data)).reduce<{ [sequencerIndex: number]: Note[] }>((acc, s, i) => {
-        const div = mod(evalBytebeat(s.bytebeat || 't', division, Math.floor(division / (get(divisions) * bars))), get(divisions) * bars);
+        const c = Math.floor(division / (get(divisions)));
+        const globalT = evalBytebeat(get(globalBytebeat).bytebeat || 't', division, c);
+        const div = mod(evalBytebeat(s.bytebeat || 't', globalT, c), get(divisions) * bars);
         const position = divisionToPosition(div);
         return {
         ...acc,

@@ -1,6 +1,6 @@
 import { WebMidi } from "webmidi";
 import { connections, midiSettingsActive } from "./midi";
-import { activeSequencer, data, showSequencers } from "./sequencers";
+import { activeSequencer, data, globalBytebeat, showSequencers } from "./sequencers";
 import { bpm, isMetronome } from "./transport";
 import { timeSignature } from ".";
 
@@ -21,6 +21,10 @@ export const loadAllStoreData = () => {
 
     showSequencers.set(retrieve<boolean>('bs.showSequencers', true));
 
+    globalBytebeat.set(retrieve<{ bytebeat: string; hasError: boolean }>('bs.globalBytebeat', {
+        bytebeat: "t",
+        hasError: false
+    }));
     // populate sequencer data
     data.update((d) => ({
         ...d,

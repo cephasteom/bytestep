@@ -1,7 +1,7 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
 import { timeSignature, bars, divisions } from '.';
-import { divisionToPosition, floorPosition, data } from './sequencers';
+import { divisionToPosition, floorPosition, data, globalBytebeat } from './sequencers';
 import { beepAt } from '$lib/sound/utils';
 import { mod } from '$lib/utils';
 import { evalBytebeat } from '$lib/utils/bytebeat';
@@ -43,13 +43,17 @@ export const isMetronome = writable(false);
 isMetronome.subscribe(persist('bs.isMetronome'));
 export const toggleIsMetronome = () => isMetronome.update(m => !m);
 
-export const sequencerTs = derived([t, c, divisions, data], ([$t, $c, $divisions, $data]) => {
+export const sequencerTs = derived([t, c, divisions, data, globalBytebeat], ([$t, $c, $divisions, $data, $globalBytebeat]) => {
     return Object.entries($data).reduce<Record<number, number>>((
         result: Record<number, number>, 
         [sequencerIndex, sequencerData]
     ) => ({
         ...result,
-        [+sequencerIndex]: $t === -1 ? -1 : mod(evalBytebeat(sequencerData.bytebeat || 't', $t, $c), $divisions * bars)
+        [+sequencerIndex]: $t === -1 ? -1 : mod(evalBytebeat(
+            sequencerData.bytebeat || 't', 
+            evalBytebeat($globalBytebeat.bytebeat || 't', $t, $c),
+            $c
+        ), $divisions * bars)
     }), {} as Record<number, number>);
 });
 
@@ -65,7 +69,7 @@ function createLoop() {
     loop = new Loop(time => {
         // get time pointer
         const nextT = get(t) + 1;
-        const nextC = Math.floor(nextT / (get(divisions) * bars));
+        const nextC = Math.floor(nextT / (get(divisions)));
 
         // advance time pointers at scheduled time
         draw.schedule(() => {

@@ -167,7 +167,7 @@ function createLoop() {
             const quantize = get(data)[+sequencerIndex]?.quantize ?? true;
 
             const output = conns[+sequencerIndex]?.output;
-            const channel = conns[+sequencerIndex]?.outputChannel || 'all';
+            const channel = conns[+sequencerIndex]?.outputChannel;
             if (!output) return;
 
             const midiOutput = WebMidi.getOutputByName(output);
@@ -179,7 +179,7 @@ function createLoop() {
                 // cut all notes on that channel just before playing new note
                 midiOutput.sendAllNotesOff({ 
                     time: `+${(delta * 1000) + (noteDelta) - 5}`, 
-                    channels: channel !== 'all' ? (channel as number + 1) : undefined 
+                    channels: channel === null ? undefined : (channel as number + 1)
                 });
             
                 let options: {[key: string]: any} = { 
@@ -188,7 +188,7 @@ function createLoop() {
                     time: `+${(delta * 1000) + (noteDelta)}`,
                 }
 
-                channel !== 'all' && (options.channels = channel as number + 1);
+                channel !== null && (options.channels = channel as number + 1);
                 
                 midiOutput.playNote(note, options);
             });
