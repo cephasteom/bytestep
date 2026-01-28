@@ -1,6 +1,8 @@
 import { get, writable } from "svelte/store";
 import { sequencers, bars, divisions } from ".";
-import { evalBytebeat, isValidBytebeat, mod } from "$lib/sound/utils";
+import { mod } from "$lib/utils";
+import { evalBytebeat, isValidBytebeat } from "$lib/utils/bytebeat";
+
 import { persist } from "./localstorage";
 
 export const notes = 127 - 36;
@@ -182,6 +184,46 @@ export const clearSequencer = (sequencer: number) => {
         [sequencer]: { 
             ...sequencers[sequencer],
             notes: [] 
+        }
+    }));
+};
+
+export const updateNoteAmp = (
+    sequencer: number,
+    position: number,
+    note: number,
+    amp: number
+) => {
+    data.update((sequencers) => ({
+        ...sequencers,
+        [sequencer]: {
+            ...sequencers[sequencer],
+            notes: sequencers[sequencer].notes.map(n => {
+                if (floorPosition(n.position) === position && n.note === note) {
+                    return { ...n, amp };
+                }
+                return n;
+            })
+        }
+    }));
+};
+
+export const updateNoteDuration = (
+    sequencer: number,
+    position: number,
+    note: number,
+    duration: number
+) => {
+    data.update((sequencers) => ({
+        ...sequencers,
+        [sequencer]: {
+            ...sequencers[sequencer],
+            notes: sequencers[sequencer].notes.map(n => {
+                if (floorPosition(n.position) === position && n.note === note) {
+                    return { ...n, duration };
+                }
+                return n;
+            })
         }
     }));
 };

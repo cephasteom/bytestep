@@ -1,4 +1,5 @@
 TODO:
+* fix progress bar
 * amp, duration, cc interface
 * bug: when recording loops round, sustained notes are cut short
 * opacity of note based on amp

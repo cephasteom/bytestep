@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeSequencer } from "$lib/stores/sequencers";
+    import { activeSequencer, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
     import { sequencerTs } from '$lib/stores/transport';
     import { data, addNote, removeNote, moveNote, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencers";
     import { bars, divisions } from "$lib/stores/";
@@ -31,6 +31,7 @@
         startDivision = -1;
         startNote = -1;
         mouseIsDown = false;
+        currentCell = { division: divisionIndex, note: noteIndex };
     }
 
     const handleMouseLeave = () => {
@@ -107,7 +108,6 @@
             {/each}
         </div>
         
-        
         <div 
             class="sequencer__grid"
             role="application"
@@ -120,7 +120,8 @@
                         note={noteIndex}
                         row={(notes - noteIndex) + 1}
                         highlighted={!(Math.floor(divisionIndex / 4) % 2)}
-                        on={$data[id].notes.some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}   
+                        on={$data[id].notes.some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}  
+                        focused={currentCell.division === divisionIndex && currentCell.note === noteIndex} 
                         active={$sequencerTs[id] !== -1 && $sequencerTs[id] % ($divisions * bars) === divisionIndex}
                         handleMouseOver={() => currentNote = noteIndex}
                         handleMouseDown={handleMouseDown}
@@ -134,7 +135,15 @@
         </div>
 
     </div>
-    <Meta {id}/>
+    {#if currentCell.division !== -1 && currentCell.note !== -1}
+        <Meta 
+            {id}
+            amp={$data[id].notes.find(n => n.position === divisionToPosition(currentCell.division) && n.note === currentCell.note)?.amp || 0.75}
+            dur={$data[id].notes.find(n => n.position === divisionToPosition(currentCell.division) && n.note === currentCell.note)?.duration || 0.75}
+            onChangeAmp={amp => updateNoteAmp(id, divisionToPosition(currentCell.division), currentCell.note, amp)}
+            onChangeDur={duration => updateNoteDuration(id, divisionToPosition(currentCell.division), currentCell.note, duration)}
+        />
+    {/if}
 </section>
 
 <style lang="scss">

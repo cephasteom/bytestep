@@ -12,6 +12,7 @@
     export let mouseIsDown: boolean = false;
     export let colour: string = 'var(--theme-1)';
     export let height: string = '1.5rem';
+    export let focused: boolean = false;
 </script>
 
 <button 
@@ -22,6 +23,7 @@
     class:cell--on={on}
     class:cell--active={active}
     class:mouseIsDown={mouseIsDown}
+    class:cell--focused={focused}
     aria-label="Toggle note {note} at division {division + 1}"
     on:mouseover={handleMouseOver}
     on:mousedown={() => handleMouseDown(division, note)}
@@ -56,8 +58,12 @@
     }
 
     &:focus {
+        outline: none;
+    }
+    &--focused {
         z-index: 10;
-        outline: 2px solid white;
+        outline: 2px dashed white !important;
+        outline-offset: 4px;
     }
 }
 </style>

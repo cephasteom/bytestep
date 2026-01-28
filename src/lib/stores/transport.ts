@@ -2,7 +2,9 @@ import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
 import { timeSignature, bars, divisions } from '.';
 import { divisionToPosition, floorPosition, data } from './sequencers';
-import { beepAt, evalBytebeat, mod } from '$lib/sound/utils';
+import { beepAt } from '$lib/sound/utils';
+import { mod } from '$lib/utils';
+import { evalBytebeat } from '$lib/utils/bytebeat';
 import { persist } from './localstorage';
 
 /**
