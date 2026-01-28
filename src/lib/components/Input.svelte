@@ -42,7 +42,7 @@
 
 <div class="input-wrapper">
     {#if prefix}
-        <button on:click={() => inputElement.focus()} class="prefix">{prefix}</button>
+        <button tabIndex="-1" on:click={() => inputElement.focus()} class="prefix">{prefix}</button>
     {/if}
     <div 
         class="input"
@@ -58,7 +58,7 @@
         />
     </div>
     {#if suffix}
-        <button on:click={() => inputElement.focus()} class="suffix">{suffix}</button>
+        <button tabIndex="-1" on:click={() => inputElement.focus()} class="suffix">{suffix}</button>
     {/if}
 </div>
 

@@ -15,6 +15,7 @@
 </script>
 
 <button 
+    tabindex="-1"
     class="cell" 
     style="grid-column: {division + 1}; grid-row: {row}; background-color: {on || active ? colour : ''}; height: {height};"
     class:cell--highlighted={highlighted}

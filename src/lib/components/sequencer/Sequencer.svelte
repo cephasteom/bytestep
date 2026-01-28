@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
     import Header from "./SequencerHeader.svelte";
     import Progress from "./SequencerProgress.svelte";
+    import Meta from "./SequencerMeta.svelte";
 
     export let id: number;
     let currentNote = -1;
@@ -33,10 +34,10 @@
     }
 
     const handleMouseLeave = () => {
-        mouseIsDown = false;
         startDivision = -1;
         startNote = -1;
         currentNote = -1;
+        mouseIsDown = false;
     };
 
     const handleMouseFocus = (divisionIndex: number, noteIndex: number) => {
@@ -92,6 +93,7 @@
 
     <div 
         class="sequencer__scrollable"
+        tabindex="-1"
         bind:this={scrollableDiv}
     >
         <div class="sequencer__piano">
@@ -130,7 +132,9 @@
                 {/each}
             {/each}
         </div>
+
     </div>
+    <Meta {id}/>
 </section>
 
 <style lang="scss">
