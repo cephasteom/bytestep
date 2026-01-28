@@ -130,6 +130,8 @@
                     width={'1.25rem'}
                 />
             </Button>
+        </div>
+        <div>
             <Input
                 value={bytebeat}
                 onInput={(value) => setBytebeat(id, value)}
@@ -138,8 +140,6 @@
                 prefix="(t, c) => "
                 width="12rem"
             />
-        </div>
-        <div>
             <Button
                 onClick={toggle}
                 padding={'0'}

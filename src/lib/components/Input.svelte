@@ -53,6 +53,7 @@
             bind:this={inputElement}
             bind:value 
             class="input__input"
+            class:input__input--underline={prefix}
             style="text-align: {prefix ? 'left' : suffix ? 'right' : 'center'};"
         />
     </div>
@@ -78,7 +79,6 @@
         &__input {
             font-size: 1.5rem;
             border: none;
-            border-radius: 3px;
             text-align: center;
             background-color: var(--black-lighter);
             color: white;
@@ -86,6 +86,14 @@
             overflow: visible;
             padding: 0;
             position: relative;
+
+            &--underline {
+                box-shadow: inset 0 -1px 0 0 var(--grey-lighter);
+            }
+
+            &:focus {
+                border-radius: 3px;
+            }
         }
     }
     .suffix, .prefix {
