@@ -1,8 +1,10 @@
 import { writable, derived } from "svelte/store";
+import { persist } from "./localstorage";
 
 export const sequencers = 4;
 export const bars = 2;
 export const timeSignature = writable<number>(4); // denominator of time signature
+timeSignature.subscribe(persist('bs.timeSignature'));
 
 export const divisions = derived(timeSignature, $timeSignature => $timeSignature * 4);
 

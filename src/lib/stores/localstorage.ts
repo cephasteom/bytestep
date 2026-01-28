@@ -1,7 +1,8 @@
 import { WebMidi } from "webmidi";
 import { connections, midiSettingsActive } from "./midi";
 import { data } from "./sequencers";
-import { isMetronome } from "./transport";
+import { bpm, isMetronome } from "./transport";
+import { timeSignature } from ".";
 
 /**
  * Load all store data from localStorage
@@ -16,18 +17,19 @@ export const loadAllStoreData = () => {
         }));
     });
 
-    midiSettingsActive.set(localStorage.getItem("bs.midiSettingsActive") || 'all');
+    midiSettingsActive.set(retrieve<string>('bs.midiSettingsActive', 'all'));
 
     // populate sequencer data
-    const sequencerData = localStorage.getItem("bs.sequencerData") || '{}'
     data.update((d) => ({
         ...d,
-        ...JSON.parse(sequencerData)
+        ...retrieve<any>('bs.sequencerData', {})
     }));
 
     // populate transport data
-    const isMetronomeData = localStorage.getItem("bs.isMetronome") || 'false'
-    isMetronome.set(JSON.parse(isMetronomeData));
+    isMetronome.set(retrieve<boolean>('bs.isMetronome', false));
+    bpm.set(retrieve<number>('bs.bpm', 120));
+    timeSignature.set(retrieve<number>('bs.timeSignature', 4));
+
 }
 
 /**
@@ -45,4 +47,14 @@ export function persist(key: string) {
         }
         localStorage.setItem(key, JSON.stringify(value));
     };
+}
+
+function retrieve<T>(key: string, defaultValue: T): T {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue === null) return defaultValue;
+    try {
+        return JSON.parse(storedValue) as T;
+    } catch {
+        return defaultValue;
+    }
 }

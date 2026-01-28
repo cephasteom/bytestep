@@ -11,6 +11,7 @@ import { persist } from './localstorage';
  * Global transport stores
  */
 export const bpm = writable(120); // bpm
+bpm.subscribe(persist('bs.bpm'));
 export const cps = derived([bpm, timeSignature], ([$bpm, $timeSignature]) => $bpm / $timeSignature / 60); // bpm / timesignature denominator (4) / 60
 export const t = writable(-1); // time pointer in divisions
 export const c = writable(0); // cycle pointer in bars
