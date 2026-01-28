@@ -1,19 +1,11 @@
 <script lang="ts">
-    import { 
-        activeSequencer, clearSequencer, 
-        toggleRecord,
-        toggleMute,
-        setBytebeat,
-    } from "$lib/stores/sequencers";
-    import { openMidiSettings } from "$lib/stores/midi";
+    import { activeSequencer } from "$lib/stores/sequencers";
     import { sequencerTs } from '$lib/stores/transport';
     import { data, addNote, removeNote, moveNote, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencers";
     import { bars, divisions } from "$lib/stores/";
     import Cell from "./Cell.svelte";
-    import SVG from "$lib/components/SVG.svelte";
-    import Button from "$lib/components/Button.svelte";
     import { onMount } from "svelte";
-    import Input from "$lib/components/Input.svelte";
+    import SequencerHeader from "./SequencerHeader.svelte";
 
     export let id: number;
     let currentNote = -1;
@@ -22,8 +14,6 @@
     let startNote = -1;
     let currentCell = {division: -1, note: -1};
     let scrollableDiv: HTMLDivElement;
-
-    const toggle = () => activeSequencer.update(activeId => activeId === id ? null : id);
 
     const handleMouseDown = (divisionIndex: number, noteIndex: number) => {
         mouseIsDown = true;
@@ -54,9 +44,6 @@
 
     $: collapsed = $activeSequencer !== id;
     $: colour = `var(--theme-${(id % 5) + 1})`;
-    $: record = $data[id]?.record || false;
-    $: muted = $data[id]?.muted || false;
-    $: bytebeat = $data[id]?.bytebeat || 't';
     
     onMount(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -96,78 +83,7 @@
     class:sequencer--collapsed={collapsed}
     style="border-color: {colour};"
 >
-    <header 
-        class="sequencer__header"
-    >
-        <div>
-            <h2>Sequencer 0{id + 1}</h2>
-            
-            <Button
-                onClick={() => toggleRecord(id)}
-                padding={'0'}
-                ariaLabel={record ? "Stop recording" : "Start recording"}
-            >
-                <SVG 
-                    type={`circle${record ? "--solid" : ""}`} 
-                    fill="var(--theme-5)" 
-                    width={'1.25rem'}
-                />
-            </Button>
-
-            <Button
-                onClick={() => clearSequencer(id)}
-                padding={'0'}
-                ariaLabel="Clear sequencer"
-            >
-                <SVG 
-                    type="erase" 
-                    width={'1.25rem'}
-                />
-            </Button>
-            
-            <Button
-                onClick={() => openMidiSettings(id)}
-                padding={'0'}
-                ariaLabel="Open MIDI settings"
-            >
-                <SVG 
-                    type="midi" 
-                    width={'1.25rem'}
-                />
-            </Button>
-
-            <Button
-                onClick={() => toggleMute(id)}
-                padding={'0'}
-                ariaLabel={muted ? "Unmute sequencer" : "Mute sequencer"}
-            >
-                <SVG 
-                    type={muted ? "mute" : "speaker"}
-                    width={'1.25rem'}
-                />
-            </Button>
-        </div>
-        <div>
-            <Input
-                value={bytebeat}
-                onInput={(value) => setBytebeat(id, value)}
-                flashOnInput={true}
-                hasError={$data[id]?.hasError}
-                prefix="(t, c) => "
-                width="12rem"
-            />
-            <Button
-                onClick={toggle}
-                padding={'0'}
-            >
-                <SVG 
-                    type={collapsed ? 'down' : 'up'} 
-                    fill={colour} 
-                    width={'1.25rem'}
-                />
-            </Button>
-        </div>
-    </header>
+    <SequencerHeader {id} />
 
     <div class="sequencer__progress">
         {#each Array($divisions * bars) as _, divisionIndex}
@@ -244,28 +160,6 @@
 
             .sequencer__progress {
                 display: grid;
-            }
-        }
-
-        &__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            h2 {
-                width: 8.5rem;
-                margin: 0;
-                color: white;
-            }
-
-            & > div {
-                display: flex;
-                align-items: center;
-                gap: 2rem;
-
-                &:last-child {
-                    gap: 1rem;
-                }
             }
         }
 

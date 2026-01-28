@@ -8,6 +8,7 @@ export const activeSequencer = writable<number | null>(null);
 activeSequencer.subscribe(persist('bs.activeSequencer'));
 
 export const showSequencers = writable(true);
+showSequencers.subscribe(persist('bs.showSequencers'));
 
 export type Note = {
     position: number; // in cycles
