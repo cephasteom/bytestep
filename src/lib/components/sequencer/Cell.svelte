@@ -21,7 +21,6 @@
     style="grid-column: {division + 1}; grid-row: {row}; background-color: {on || active ? colour : ''}; height: {height};"
     class:cell--highlighted={highlighted}
     class:cell--on={on}
-    class:cell--active={active}
     class:mouseIsDown={mouseIsDown}
     class:cell--focused={focused}
     aria-label="Toggle note {note} at division {division + 1}"

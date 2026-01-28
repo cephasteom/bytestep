@@ -1,12 +1,13 @@
 TODO:
 * fix progress bar
-* amp, duration, cc interface
+* cc interface
 * bug: when recording loops round, sustained notes are cut short
 * opacity of note based on amp
 * settings modal - with interference and cellular automata
 * make some music / sound design
 * interference
 * sync to DAW
+* transpose up and down octave
 
 # sv
 
