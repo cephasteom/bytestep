@@ -175,6 +175,13 @@ function createLoop() {
             
             notes.forEach(({ position, note, amp, duration }) => {
                 const noteDelta = quantize ? 0 : (position - nextPosition) * cycleDuration;
+
+                // cut all notes on that channel just before playing new note
+                midiOutput.sendAllNotesOff({ 
+                    time: `+${(delta * 1000) + (noteDelta) - 5}`, 
+                    channels: channel !== 'all' ? (channel as number + 1) : undefined 
+                });
+            
                 let options: {[key: string]: any} = { 
                     attack: amp, 
                     duration: duration * cycleDuration, 

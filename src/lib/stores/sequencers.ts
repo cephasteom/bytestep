@@ -104,8 +104,8 @@ export const addNote = (
     sequencer: number,
     position: number,
     note: number,
-    amp = 0.75,
-    duration = 0.25
+    amp = 0.5,
+    duration = 1/16
 ) => {
     data.update((sequencers) => ({
         ...sequencers,
