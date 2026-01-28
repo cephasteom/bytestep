@@ -12,11 +12,11 @@
     } from "$lib/stores/sequencers";
 
     export let id: number;
+    export let colour: string;
 
     const toggle = () => activeSequencer.update(activeId => activeId === id ? null : id);
 
     $: collapsed = $activeSequencer !== id;
-    $: colour = `var(--theme-${(id % 5) + 1})`;
     $: record = $data[id]?.record || false;
     $: muted = $data[id]?.muted || false;
     $: bytebeat = $data[id]?.bytebeat || "t";
