@@ -5,6 +5,7 @@ import { divisions } from ".";
 import { t, isRecording, position, cps } from "./transport";
 import { persist } from "./localstorage";
 import { immediate, Loop } from "tone";
+import { clamp } from "$lib/utils";
 
 /**
  * MIDI inputs and outputs, and connections to sequencers
@@ -73,12 +74,13 @@ const addListeners = () => {
             const note = activeNotes[noteIndex];
             const pos = get(position);
             const duration = pos - note.position;
+
             // update the note with duration
-            activeNotes[noteIndex].duration = duration > 0 ? duration : (1/get(divisions));
+            activeNotes[noteIndex].duration = clamp(duration, 1 / get(divisions), 4);
             // add to sequencer
             Object.entries(get(connections))
                 .filter(([_, conn]) => conn.input === input.name)
-                .forEach(([sequencer, i]) => {
+                .forEach(([sequencer]) => {
                     if(!get(data)[+sequencer]?.record) return;
                     addNote(
                         parseInt(sequencer),

@@ -1,20 +1,31 @@
 TODO:
 Musts:
 * make some music / sound design
-* bug: when recording loops round, sustained notes are cut short
+* bug: move note not working
+* bug: better rounding to nearest position on record
+* bug: delete note
+* bug: clicking on the note made the durations go to the default...
 * volume fader - pushes all notes eventually to an amp of 1
 * more bars please, perhaps with the default set to loop at 2?
+* handle global midi settings
+* tooltips
 
 Nice to haves once proven useful:
+* show note currently played on the piano roll
 * sequencer settings modal 
     - number of bars
     - quantize division and pitch
     - interference 
     - random - generation and riffing on what's there
     - cellular automata
+* duplicate sequencer
 * cc interface
 * sync to DAW
 * transpose up and down octave
+* editable names for sequencers
+* clear all / reset
+* PWA
+* code editor...
 
 # ByteStep
 A MIDI step sequencer combining the convenience of a DAW with the flexibility of code. In development. 

@@ -9,3 +9,7 @@ export function debounce<F extends (...args: any[]) => any>(func: F, wait: numbe
         timeout = setTimeout(() => func.apply(this, args), wait);
     } as F;
 }
+
+export function clamp(num: number, min: number, max: number): number {
+    return Math.min(Math.max(num, min), max);
+}

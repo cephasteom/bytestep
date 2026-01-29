@@ -231,9 +231,9 @@ export const query: (division: number) => { [sequencerIndex: number]: Note[] } =
         ...acc,
         [i]: s.notes.filter((n) => 
             // note happens on or after position
-            n.position >= position 
+            (n.position % bars) >= position 
             // but before next division
-            && n.position < floorPosition(position) + (1 / get(divisions)))
+            && (n.position % bars) < floorPosition(position) + (1 / get(divisions)))
     }}, {});
 };
 
@@ -255,7 +255,8 @@ export const happensWithin = (division: number, position: number) => {
  * @returns 
  */
 export const divisionToPosition = (division: number) => {
-    return ((division % (get(divisions) * bars)) / get(divisions));
+    // return ((division % (get(divisions) * bars)) / get(divisions));
+    return division / get(divisions);
 }
 
 /**
