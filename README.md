@@ -3,7 +3,6 @@ Musts:
 * make some music / sound design
 * more bars please, perhaps with the default set to loop at 2?
 * volume fader - pushes all notes eventually to an amp of 1
-* handle global midi settings
 * tooltips
 
 Nice to haves once proven useful:

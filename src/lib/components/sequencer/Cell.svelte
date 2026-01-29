@@ -11,7 +11,7 @@
     export let handleMouseFocus: (division: number, note: number) => void = () => {};
     export let mouseIsDown: boolean = false;
     export let colour: string = 'var(--theme-1)';
-    export let height: string = '1.5rem';
+    export let height: string = '1rem';
     export let focused: boolean = false;
 </script>
 

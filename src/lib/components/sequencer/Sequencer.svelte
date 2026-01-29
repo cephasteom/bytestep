@@ -68,7 +68,7 @@
             // scroll to highest note when activated
             const highestNote = $data[id].notes.reduce((max, n) => n.note > max ? n.note : max, 0 );
             scrollableDiv.scrollTo({
-                top: ((24 + 2) * (notes - highestNote)),
+                top: ((16 + 2) * (notes - highestNote)),
             });
 
             hasScrolled = true;
@@ -182,7 +182,7 @@
                 background-color: var(--grey);
                 border-right: 3px solid var(--black-lighter);
                 box-sizing: border-box;
-                height: 1.5rem;
+                height: 1rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
