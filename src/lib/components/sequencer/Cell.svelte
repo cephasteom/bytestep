@@ -2,7 +2,6 @@
     export let row: number;
     export let division: number;
     export let note: number;
-    export let highlighted: boolean;
     export let on: boolean = false;
     export let active: boolean = false;
     export let handleMouseOver: () => void = () => {};
@@ -13,13 +12,23 @@
     export let colour: string = 'var(--theme-1)';
     export let height: string = '1rem';
     export let focused: boolean = false;
+
+    $: backgroundColor = on || active 
+        ? colour 
+        : (Math.floor(division / 4) % 2) 
+            ? 'var(--grey-lighter)' 
+            : 'var(--grey-dark)';
 </script>
 
 <button 
     tabindex="-1"
     class="cell" 
-    style="grid-column: {division + 1}; grid-row: {row}; background-color: {on || active ? colour : ''}; height: {height};"
-    class:cell--highlighted={highlighted}
+    style={`
+        grid-column: ${division + 1}; 
+        grid-row: ${row}; 
+        background-color: ${backgroundColor}; 
+        height: ${height};`
+    }
     class:cell--on={on}
     class:mouseIsDown={mouseIsDown}
     class:cell--focused={focused}
@@ -41,9 +50,6 @@
     position: relative;
     background-color: var(--grey-dark);
 
-    &--highlighted {
-        background-color: var(--grey);
-    }
     &:hover:not(&--on) {
         background-color: rgba(255, 255, 255, 0.1);
     }

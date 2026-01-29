@@ -55,6 +55,6 @@
         flex-direction: column;
         gap: var(--spacer);
         box-sizing: border-box;
-        min-width: 1000px;
+        min-width: 1200px;
     }
 </style>

@@ -119,7 +119,6 @@
                         division={divisionIndex}
                         note={noteIndex}
                         row={(notes - noteIndex) + 1}
-                        highlighted={!(Math.floor(divisionIndex / 4) % 2)}
                         on={$data[id].notes.some(n => happensWithin(divisionIndex, n.position) && n.note === noteIndex)}  
                         focused={currentCell.division === divisionIndex && currentCell.note === noteIndex} 
                         active={$sequencerTs[id] !== -1 && $sequencerTs[id] % ($divisions * bars) === divisionIndex}
