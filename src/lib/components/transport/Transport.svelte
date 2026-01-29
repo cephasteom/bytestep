@@ -12,6 +12,7 @@
     import { onMount } from 'svelte';
     import Input from '$lib/components/Input.svelte';
     import { globalBytebeat, setGlobalBytebeat } from '$lib/stores/sequencers';
+  import { clamp } from '$lib/utils';
 
     onMount(() => mapTransportKeys());
 </script>
@@ -46,7 +47,8 @@
 
         <div class="transport__item">
             <Input 
-                bind:value={$timeSignature} 
+                value={$timeSignature} 
+                onInput={(value) => timeSignature.set(clamp(parseInt(value) || 4, 1, 7) )}
                 width=".75rem"
                 suffix="/ 4" 
             />

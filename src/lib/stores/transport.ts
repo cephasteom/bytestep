@@ -1,7 +1,7 @@
 import { getTransport, immediate, Loop, getDraw } from 'tone'
 import { writable, get, derived } from 'svelte/store';
 import { timeSignature, bars, divisions } from '.';
-import { divisionToPosition, data, globalBytebeat } from './sequencers';
+import { data, globalBytebeat } from './sequencers';
 import { beepAt } from '$lib/sound/utils';
 import { mod } from '$lib/utils';
 import { evalBytebeat } from '$lib/utils/bytebeat';
