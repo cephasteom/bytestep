@@ -1,7 +1,7 @@
 import { writable, get } from "svelte/store";
 import { WebMidi } from "webmidi";
 import { data, addNote, type Note, query, divisionToPosition } from "./sequencers";
-import { divisions } from ".";
+import { bars, divisions } from ".";
 import { t, isRecording, position, cps } from "./transport";
 import { persist } from "./localstorage";
 import { immediate, Loop } from "tone";
@@ -84,7 +84,7 @@ const addListeners = () => {
                     if(!get(data)[+sequencer]?.record) return;
                     addNote(
                         parseInt(sequencer),
-                        note.position,
+                        note.position % bars,
                         note.note,
                         note.amp,
                         activeNotes[noteIndex].duration

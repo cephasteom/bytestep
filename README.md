@@ -4,7 +4,6 @@ Musts:
 * bug: move note not working
 * bug: better rounding to nearest position on record
 * bug: delete note
-* bug: clicking on the note made the durations go to the default...
 * volume fader - pushes all notes eventually to an amp of 1
 * more bars please, perhaps with the default set to loop at 2?
 * handle global midi settings
