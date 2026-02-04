@@ -54,7 +54,7 @@
             &.active::after {
                 bottom: auto;
                 top: 50%;
-                left: -10px;
+                left: -1rem;
                 transform: translateY(-50%);
             }
         }

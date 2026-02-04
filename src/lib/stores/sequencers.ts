@@ -50,8 +50,21 @@ export const removeLastSequencer = () => {
         return newSequencers;
     });
     sequencers.update(n => Math.max(1, n - 1));
+};
 
-    console.log('Removed last sequencer');
+export const addSequencer = () => {
+    const newIndex = Object.keys(get(data)).length;
+    data.update((sequencers) => ({
+        ...sequencers,
+        [newIndex]: {
+            record: false,
+            muted: false,
+            quantize: true,
+            notes: [],
+            bytebeat: "t"
+        }
+    }));
+    sequencers.update(n => n + 1);
 };
 
 export const globalBytebeat = writable<{ bytebeat: string; hasError: boolean }>({

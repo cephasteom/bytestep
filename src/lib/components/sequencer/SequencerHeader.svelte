@@ -26,7 +26,7 @@
 
 <header>
     <div>
-        <h2>Sequencer 0{id + 1}</h2>
+        <h2>Sequencer {id + 1}</h2>
         
         <Tooltip text={`Record sequencer ${id + 1}`}>
             <Button
