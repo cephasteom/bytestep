@@ -4,7 +4,7 @@
 </script>
 
 <section class="sequencers">
-    {#each Array(sequencers) as _, key}
+    {#each Array($sequencers) as _, key}
         <Sequencer id={key} />
     {/each}
 </section>
@@ -16,7 +16,5 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacer);
-        overflow: scroll;
-        max-height: calc(100vh - var(--header-height));
     }
 </style>

@@ -50,6 +50,7 @@
     .app {
         width: 100%;
         height: calc(100vh - var(--header-height));
+        overflow: scroll;
         padding: var(--spacer);
         display: flex;
         flex-direction: column;

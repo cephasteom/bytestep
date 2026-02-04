@@ -2,7 +2,7 @@ import { WebMidi } from "webmidi";
 import { connections, midiSettingsActive } from "./midi";
 import { activeSequencer, data, globalBytebeat, showSequencers } from "./sequencers";
 import { bpm, isMetronome } from "./transport";
-import { bars, timeSignature } from ".";
+import { bars, sequencers, timeSignature } from ".";
 
 /**
  * Load all store data from localStorage
@@ -25,7 +25,10 @@ export const loadAllStoreData = () => {
         bytebeat: "t",
         hasError: false
     }));
+    
     // populate sequencer data
+    sequencers.update((n) => retrieve<number>('bs.sequencers', n));
+
     data.update((d) => ({
         ...d,
         ...retrieve<any>('bs.sequencerData', {})

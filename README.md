@@ -1,8 +1,6 @@
 TODO:
 Musts:
 * make some music / sound design
-* volume fader - pushes all notes eventually to an amp of 1
-* tooltips
 * overflow scroll on the sequencers...
 * add more sequencers
 

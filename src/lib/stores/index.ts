@@ -1,7 +1,8 @@
 import { writable, derived } from "svelte/store";
 import { persist } from "./localstorage";
 
-export const sequencers = 3;
+export const sequencers = writable<number>(3);
+sequencers.subscribe(persist('bs.sequencers'));
 
 export const bars = writable<number>(4);
 bars.subscribe(persist('bs.bars'));

@@ -29,7 +29,7 @@ export type SequencerData = { [sequencerIndex: number]: {
 } };
 
 export const data = writable<SequencerData>(
-    Array.from({ length: sequencers }).reduce<SequencerData>(
+    Array.from({ length: get(sequencers) }).reduce<SequencerData>(
         (acc, _, s) => ({ 
             ...acc, 
             [s]: { 
