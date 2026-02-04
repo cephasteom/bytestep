@@ -1,12 +1,24 @@
 <script lang="ts">
-    import { showAbout } from '$lib/stores';
+    import { showAbout, showHelp } from '$lib/stores';
     import Button from './Button.svelte';
 </script>
 
 <header class="header">
     <h1>ByteStep</h1>
     <nav>
-        <Button onClick={() => showAbout.set(true)}>
+        <Button 
+            onClick={() => showHelp.update(v => !v)}
+            isActive={$showHelp}
+            orientation="horizontal"
+        >
+            <span>Help</span>
+        </Button>
+
+        <Button 
+            onClick={() => showAbout.set(true)}
+            isActive={$showAbout}
+            orientation="horizontal"
+        >
             <span>About</span>
         </Button>
     </nav>
@@ -29,6 +41,11 @@
         span {
             font-size: 1.25rem;
             color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: var(--spacer);
         }
     }
 </style>

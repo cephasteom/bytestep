@@ -10,6 +10,7 @@
         toggleMute,
         setBytebeat,
     } from "$lib/stores/sequencers";
+    import Tooltip from '$lib/components/Tooltip.svelte';
 
     export let id: number;
     export let colour: string;
@@ -27,60 +28,70 @@
     <div>
         <h2>Sequencer 0{id + 1}</h2>
         
-        <Button
-            onClick={() => toggleRecord(id)}
-            padding={'0'}
-            ariaLabel={record ? "Stop recording" : "Start recording"}
-        >
-            <SVG 
-                type={`circle${record ? "--solid" : ""}`} 
-                fill="var(--theme-5)" 
-                width={'1.25rem'}
-            />
-        </Button>
+        <Tooltip text={`Record sequencer ${id + 1}`}>
+            <Button
+                onClick={() => toggleRecord(id)}
+                padding={'0'}
+                ariaLabel={record ? "Stop recording" : "Start recording"}
+            >
+                <SVG 
+                    type={`circle${record ? "--solid" : ""}`} 
+                    fill="var(--theme-5)" 
+                    width={'1.25rem'}
+                />
+            </Button>
+        </Tooltip>
 
-        <Button
-            onClick={() => clearSequencer(id)}
-            padding={'0'}
-            ariaLabel="Clear sequencer"
-        >
-            <SVG 
-                type="erase" 
-                width={'1.25rem'}
-            />
-        </Button>
+        <Tooltip text={`Clear sequencer ${id + 1}`}>
+            <Button
+                onClick={() => clearSequencer(id)}
+                padding={'0'}
+                ariaLabel="Clear sequencer"
+            >
+                <SVG 
+                    type="erase" 
+                    width={'1.25rem'}
+                />
+            </Button>
+        </Tooltip>
         
-        <Button
-            onClick={() => openMidiSettings(id)}
-            padding={'0'}
-            ariaLabel="Open MIDI settings"
-        >
-            <SVG 
-                type="midi" 
-                width={'1.25rem'}
-            />
-        </Button>
+        <Tooltip text={`Open MIDI settings for sequencer ${id + 1}`}>
+            <Button
+                onClick={() => openMidiSettings(id)}
+                padding={'0'}
+                ariaLabel="Open MIDI settings"
+            >
+                <SVG 
+                    type="midi" 
+                    width={'1.25rem'}
+                />
+            </Button>
+        </Tooltip>
 
-        <Button
-            onClick={() => toggleMute(id)}
-            padding={'0'}
-            ariaLabel={muted ? "Unmute sequencer" : "Mute sequencer"}
-        >
-            <SVG 
-                type={muted ? "mute" : "speaker"}
-                width={'1.25rem'}
-            />
-        </Button>
+        <Tooltip text={muted ? "Unmute sequencer" : "Mute sequencer"}>
+            <Button
+                onClick={() => toggleMute(id)}
+                padding={'0'}
+                ariaLabel={muted ? "Unmute sequencer" : "Mute sequencer"}
+            >
+                <SVG 
+                    type={muted ? "mute" : "speaker"}
+                    width={'1.25rem'}
+                />
+            </Button>
+        </Tooltip>
     </div>
     <div>
-        <Input
-            value={bytebeat}
-            onInput={(value) => setBytebeat(id, value)}
-            flashOnInput={true}
-            hasError={$data[id]?.hasError}
-            prefix="(t, c) => "
-            width="12rem"
-        />
+        <Tooltip text={`Bytebeat expression for sequencer ${id + 1}.`}>
+            <Input
+                value={bytebeat}
+                onInput={(value) => setBytebeat(id, value)}
+                flashOnInput={true}
+                hasError={$data[id]?.hasError}
+                prefix="(t, c) => "
+                width="12rem"
+            />
+        </Tooltip>
         <Button
             onClick={toggle}
             padding={'0'}

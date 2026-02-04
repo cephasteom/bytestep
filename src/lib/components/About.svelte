@@ -9,7 +9,7 @@
 >
     <p>ByteStep combines the convenience of a DAW with the flexibility of live coding.</p>
     <p>Record or input a sequence of notes, then transform time using a JavaScript expression. For example, <span>t</span> plays the sequence normally, <span>t * 2</span> plays it at double speed, and <span>32 - t</span> plays it backwards.</p>
-    <p>Available variables are <span>t</span> the current time step and <span>c</span> the current cycle.</p>
+    <p>Click Help to turn on tooltips.</p>
     
     <p>Visual designs by Ellie Hobbs @ <a href="https://lunar.build">lunar.build</a>.</p>
     <p>© {new Date().getFullYear()} Peter Thomas | <a href="https://cephasteom.co.uk">cephasteom.co.uk</a>.</p>

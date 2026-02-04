@@ -6,10 +6,11 @@
     export let fontSize = '1rem';
     export let padding = '0.5rem';
     export let isActive = false;
+    export let orientation: 'horizontal' | 'vertical' = 'vertical';
 </script>
 
 <button 
-    class="btn" 
+    class="btn btn--{orientation}" 
     class:active={isActive}
     on:click={onClick} 
     style="width: {width}; padding: {padding}; font-size: {fontSize};"
@@ -47,6 +48,15 @@
             // make colour glow
             box-shadow: 0 0 10px var(--theme-2);
             border-radius: 50%;
+        }
+
+        &--horizontal {
+            &.active::after {
+                bottom: auto;
+                top: 50%;
+                left: -10px;
+                transform: translateY(-50%);
+            }
         }
     }
     

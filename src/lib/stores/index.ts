@@ -12,3 +12,4 @@ timeSignature.subscribe(persist('bs.timeSignature'));
 export const divisions = derived(timeSignature, $timeSignature => $timeSignature * 4);
 
 export const showAbout = writable(false);
+export const showHelp = writable(false);

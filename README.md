@@ -3,9 +3,10 @@ Musts:
 * make some music / sound design
 * volume fader - pushes all notes eventually to an amp of 1
 * tooltips
+* overflow scroll on the sequencers...
+* add more sequencers
 
 Nice to haves once proven useful:
-* show note currently played on the piano roll
 * sync to DAW
 * clear all / reset
 * code editor
@@ -17,6 +18,7 @@ Nice to haves once proven useful:
 * duplicate sequencer
 * cc interface
 * editable names for sequencers
+* show note currently played on the piano roll
 * PWA
 
 # ByteStep
