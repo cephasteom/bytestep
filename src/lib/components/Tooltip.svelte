@@ -6,9 +6,10 @@
 
 <div class="tooltip">
     <slot></slot>
-    {#if $showHelp}
-        <span class="tooltip__text {position}">{text}</span>
-    {/if}
+    <span 
+        class="tooltip__text {position}"
+        style="display: { $showHelp ? 'block' : 'none' };"
+    >{text}</span>
 </div>
 
 <style lang="scss">

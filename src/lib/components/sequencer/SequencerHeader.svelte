@@ -68,7 +68,7 @@
             </Button>
         </Tooltip>
 
-        <Tooltip text={muted ? "Unmute sequencer" : "Mute sequencer"}>
+        <Tooltip text={muted ? "Unmute sequencer" : "Mute sequencer" + ` ${id + 1}`}>
             <Button
                 onClick={() => toggleMute(id)}
                 padding={'0'}
