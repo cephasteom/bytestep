@@ -1,12 +1,9 @@
 TODO:
 Musts:
 * make some music / sound design
-* overflow scroll on the sequencers...
-* add more sequencers
 
 Nice to haves once proven useful:
 * sync to DAW
-* clear all / reset
 * code editor
 * sequencer settings modal 
     - quantize division and pitch
