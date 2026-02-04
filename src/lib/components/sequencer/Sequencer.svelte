@@ -1,13 +1,15 @@
 <script lang="ts">
-    import { activeSequencer, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
+    import { activeSequencer, removeLastSequencer, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
     import { sequencerTs } from '$lib/stores/transport';
     import { data, addNote, removeNote, moveNote, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencers";
-    import { bars, divisions } from "$lib/stores/";
+    import { bars, divisions, sequencers } from "$lib/stores/";
     import Cell from "./Cell.svelte";
     import { onMount } from "svelte";
     import Header from "./SequencerHeader.svelte";
     import Progress from "./SequencerProgress.svelte";
     import Meta from "./SequencerMeta.svelte";
+  import Button from "../Button.svelte";
+  import Tooltip from "../Tooltip.svelte";
 
     export let id: number;
     let currentNote = -1;
@@ -86,6 +88,16 @@
     class:sequencer--collapsed={collapsed}
     style="border-color: {colour};"
 >
+    {#if id && id === $sequencers - 1}
+        <div class="sequencer__remove">
+            <Tooltip text="Remove Sequencer" position="right">
+                <Button 
+                    onClick={removeLastSequencer}
+                >-</Button>  
+            </Tooltip>
+        </div>
+    {/if}
+
     <Header {id} {colour} />
 
     {#if collapsed}
@@ -157,6 +169,14 @@
         max-height: 26rem;
         transition: max-height 0.2s ease;
         overflow: scroll;
+        position: relative;
+
+        &__remove {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
 
         &--collapsed {
             max-height: 60px; // header height;

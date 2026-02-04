@@ -43,6 +43,17 @@ export const data = writable<SequencerData>(
 );
 data.subscribe(persist('bs.sequencerData'));
 
+export const removeLastSequencer = () => {
+    data.update((sequencers) => {
+        const newSequencers = { ...sequencers };
+        delete newSequencers[Object.keys(newSequencers).length - 1];
+        return newSequencers;
+    });
+    sequencers.update(n => Math.max(1, n - 1));
+
+    console.log('Removed last sequencer');
+};
+
 export const globalBytebeat = writable<{ bytebeat: string; hasError: boolean }>({
     bytebeat: "t",
     hasError: false
