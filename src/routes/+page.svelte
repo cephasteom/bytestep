@@ -73,7 +73,7 @@
         &__lower {
             display: flex;
             gap: var(--spacer);
-            // height: 100%;
+            min-height: calc(100% - 6rem);
         }
     }
 </style>
