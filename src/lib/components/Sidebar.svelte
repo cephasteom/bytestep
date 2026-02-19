@@ -17,7 +17,7 @@
     </Button>
 
     <Button
-        label="Qbit"
+        label="Qbts"
         padding={'0'}
         onClick={() => showCircuit.update(v => !v)}
         isActive={$showCircuit}

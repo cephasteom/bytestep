@@ -13,7 +13,7 @@
     let isMoving: boolean = false;
 
     const getWireIndex = (x: number, y: number) => {
-        return clamp(Math.floor((y - 38 + thisContainer.scrollTop) / 80), 0, 7);
+        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y) / 80), 0, 8);
     }
 
     const getColumnIndex = (x: number) => {
@@ -204,7 +204,6 @@
         }
 
         &__circuit {
-            margin-top: 3.3rem;
             width: 100%;
         }
 
@@ -234,7 +233,6 @@
         }
 
         :global(.qc-circuit text) {
-            font-size: 0.65rem;
             color: white!important;
             fill: white!important;
             stroke: white!important;
@@ -250,7 +248,7 @@
         // :global(.qc-circuit ellipse), 
         :global(.qc-circuit rect), 
         :global(.qc-circuit path) {
-            fill: black!important;
+            fill: var(--black-lighter)!important;
             stroke: white!important;
             cursor: grab;
         }

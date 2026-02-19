@@ -12,6 +12,7 @@
     import MIDISettings from '$lib/components/MIDISettings.svelte';
     import { showSequencers } from '$lib/stores/sequencers';
     import { showCircuit } from '$lib/stores/circuit';
+  import Circuit from '$lib/components/circuit/Circuit.svelte';
 
     onMount(loadAllStoreData);
 </script>
@@ -31,7 +32,7 @@
             <div class="app__lower">
                 {#if $showCircuit}
                     <section class="tmp-circuit">
-                        Hello Circuit
+                        <Circuit />
                     </section>
                 {/if}
                 {#if $showSequencers}
@@ -47,6 +48,8 @@
         background-color: var(--black-lighter);
         border-radius: var(--border-radius);
         width: 50%;
+        padding: 1rem var(--spacer);
+        overflow: scroll;
     }
     main {
         min-height: 100vh;

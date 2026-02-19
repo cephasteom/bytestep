@@ -60,9 +60,14 @@
         position: relative;
         background-color: transparent;
         color: white;
-        padding: 1.25rem 0;
-        border: 0.25px solid rgba(255,255,255,0.5);
-        width: 100%;
+        padding: 1rem;
+        border: 1px solid white;
+        border-radius: 5px;
+        font-size: 1.125rem;
+        text-transform: uppercase;
+        &:focus {
+            outline: none;
+        }
 
         &:disabled {
             cursor: not-allowed;
@@ -72,7 +77,6 @@
         span {
             cursor: grab;
             display: inline-block;
-            padding: 1rem;
             background-color: transparent;
             text-align: center;
             position: absolute;
