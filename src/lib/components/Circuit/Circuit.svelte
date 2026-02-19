@@ -3,10 +3,6 @@
     import { circuit, gates, updateParams, circuitParams, type Gate } from '$lib/stores/circuit';
     import { onMount } from 'svelte';
     import { areTouching, arraysAreEqual, clamp } from '$lib/utils';
-    import SidePanel from '$lib/components/SidePanel/SidePanel.svelte';
-    import { showCircuit } from '$lib/stores/kaleidoscope';
-    import Button from '$lib/components/Button/Button.svelte';
-    import { faEraser } from '@fortawesome/free-solid-svg-icons';
 
     let svg: string = "";
     let thisSvg: HTMLDivElement;
@@ -145,72 +141,50 @@
     isMoving = false
 }} />
 
-{#if $showCircuit}
-<SidePanel>
-    <section 
-        class="circuit-designer"
-        bind:this={thisContainer}
-    >
-        <aside class="circuit-designer__palette">
-            <h2 class="title">Circuit</h2>
-            <div 
-                class="circuit-designer__gates"
-            >
-                {#each $gates as gate, i}
-                    <GateButton 
-                        id={i}
-                        symbol={gate.symbol}
-                        mouseover={() => focusedGate = gate}
-                        mouseout={() => focusedGate = null}
-                        dragend={(data: { id: number, x: number, y: number }) => {
-                            const { id, x, y } = data;
-                            handleDragEnd(id, x, y)
-                        }}
-                    />
-                {/each}
-            </div>
-            <Button 
-                onClick={clearCircuit}
-                icon={faEraser}
-                style="height: 2rem; border-radius: 5px; width: 4rem;"
-            />
-        </aside>
-        <div class="circuit-designer__circuit">
-            {#if svg}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                <div 
-                    bind:this={thisSvg}
-                    class="circuit-designer__svg"
-                    class:circuit-designer__svg--moving={isMoving}
-                    on:mousedown={handleMouseDown}
-                    on:mouseover={handleMouseMove}
-                    on:mouseup={handleMouseUp}
-                    on:mouseleave={handleMouseUp}
-                >
-                    {@html svg}
-                </div>
-            {/if}
+<section 
+    class="circuit-designer"
+    bind:this={thisContainer}
+>
+    <aside class="circuit-designer__palette">
+        <h2 class="title">Circuit</h2>
+        <div 
+            class="circuit-designer__gates"
+        >
+            {#each $gates as gate, i}
+                <GateButton 
+                    id={i}
+                    symbol={gate.symbol}
+                    mouseover={() => focusedGate = gate}
+                    mouseout={() => focusedGate = null}
+                    dragend={(data: { id: number, x: number, y: number }) => {
+                        const { id, x, y } = data;
+                        handleDragEnd(id, x, y)
+                    }}
+                />
+            {/each}
         </div>
-    </section>
-</SidePanel>
-{/if}
+    </aside>
+    <div class="circuit-designer__circuit">
+        {#if svg}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div 
+                bind:this={thisSvg}
+                class="circuit-designer__svg"
+                class:circuit-designer__svg--moving={isMoving}
+                on:mousedown={handleMouseDown}
+                on:mouseover={handleMouseMove}
+                on:mouseup={handleMouseUp}
+                on:mouseleave={handleMouseUp}
+            >
+                {@html svg}
+            </div>
+        {/if}
+    </div>
+</section>
 
 <style lang="scss">
-    .buttons {
-        &__inner {
-            padding: 1rem;
-            display: flex;
-            justify-content: flex-end;
-            @media (min-width: 1200px) {
-                padding: 1rem 2rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            padding-bottom: 1.5rem;
-        }
-	}
 
     .title {
         color: white;
@@ -241,20 +215,10 @@
             width: 100%;
             gap: 0.5rem;
             width: 4rem;
-
-            & button {
-                width: 100%;
-            }
         }
 
         &__circuit {
             width: 100%;
-        }
-
-        &__input {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1rem;
         }
 
         &__svg {

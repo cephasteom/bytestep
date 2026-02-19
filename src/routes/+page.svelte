@@ -10,11 +10,10 @@
     import Sidebar from '$lib/components/Sidebar.svelte';
     import About from '$lib/components/About.svelte';
     import MIDISettings from '$lib/components/MIDISettings.svelte';
-  import { showSequencers } from '$lib/stores/sequencers';
+    import { showSequencers } from '$lib/stores/sequencers';
+    import { showCircuit } from '$lib/stores/circuit';
 
-    onMount(() => {
-        loadAllStoreData();
-    });
+    onMount(loadAllStoreData);
 </script>
 
 <main>
@@ -30,6 +29,8 @@
             <Transport />
             {#if $showSequencers}
                 <Sequencers />
+            {/if}
+            {#if $showCircuit}
             {/if}
         </div>
     </div>
