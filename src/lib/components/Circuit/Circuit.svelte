@@ -13,7 +13,7 @@
     let isMoving: boolean = false;
 
     const getWireIndex = (x: number, y: number) => {
-        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y) / 80), 0, 8);
+        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y - thisContainer.scrollTop) / 80), 0, 8);
     }
 
     const getColumnIndex = (x: number) => {
@@ -43,7 +43,7 @@
         const gate = $gates[i];
         const wire = getWireIndex(pointerX, pointerY);
         const column = getColumnIndex(pointerX);
-        const wires = Array.from({ length: gate.qubits }, (_, i) => clamp(wire + i, 0, 5));
+        const wires = Array.from({ length: gate.qubits }, (_, i) => clamp(wire + i, 0, 10));
         const options = gate.params.length
             ? { params: gate.params.reduce((acc, param) => ({ ...acc, [param.name]: param.default }), {}) }
             : {};

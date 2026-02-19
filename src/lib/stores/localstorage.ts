@@ -3,6 +3,7 @@ import { connections, midiSettingsActive } from "./midi";
 import { activeSequencer, data, globalBytebeat, showSequencers } from "./sequencers";
 import { bpm, isMetronome } from "./transport";
 import { bars, sequencers, timeSignature } from ".";
+import { showCircuit } from "./circuit";
 
 /**
  * Load all store data from localStorage
@@ -20,6 +21,7 @@ export const loadAllStoreData = () => {
     midiSettingsActive.set(retrieve<number>('bs.midiSettingsActive', 0));
 
     showSequencers.set(retrieve<boolean>('bs.showSequencers', true));
+    showCircuit.set(retrieve<boolean>('bs.showCircuit', false));
 
     globalBytebeat.set(retrieve<{ bytebeat: string; hasError: boolean }>('bs.globalBytebeat', {
         bytebeat: "t",
