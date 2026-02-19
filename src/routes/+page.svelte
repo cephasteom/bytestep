@@ -27,16 +27,27 @@
         <Sidebar />
         <div class="app">
             <Transport />
-            {#if $showSequencers}
-                <Sequencers />
-            {/if}
-            {#if $showCircuit}
-            {/if}
+
+            <div class="app__lower">
+                {#if $showCircuit}
+                    <section class="tmp-circuit">
+                        Hello Circuit
+                    </section>
+                {/if}
+                {#if $showSequencers}
+                    <Sequencers />
+                {/if}
+            </div>
         </div>
     </div>
 </main>
 
 <style lang="scss">
+    .tmp-circuit {
+        background-color: var(--black-lighter);
+        border-radius: var(--border-radius);
+        width: 50%;
+    }
     main {
         min-height: 100vh;
     }
@@ -58,5 +69,11 @@
         gap: var(--spacer);
         box-sizing: border-box;
         min-width: 1200px;
+
+        &__lower {
+            display: flex;
+            gap: var(--spacer);
+            // height: 100%;
+        }
     }
 </style>

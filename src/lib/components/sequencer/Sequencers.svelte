@@ -1,8 +1,6 @@
 <script lang="ts">
     import { sequencers } from '$lib/stores/';
-    import { addSequencer } from '$lib/stores/sequencers';
-    import Button from '../Button.svelte';
-    import Tooltip from '../Tooltip.svelte';
+    import { addSequencer, removeLastSequencer } from '$lib/stores/sequencers';
     import Sequencer from './Sequencer.svelte';
 </script>
 
@@ -10,15 +8,24 @@
     {#each Array($sequencers) as _, key}
         <Sequencer id={key} />
     {/each}
-    {#if $sequencers < 8}
-        <div class="sequencers__add">
-            <Tooltip text="Add Sequencer" position="right">
-                <Button
-                    onClick={addSequencer}
-                >+</Button>
-            </Tooltip>
-        </div>
-    {/if}
+    <div class="sequencers__buttons">
+        {#if $sequencers > 1}
+            <button 
+                class="sequencers__remove"
+                on:click={removeLastSequencer}
+            >
+                - Sequencer
+            </button>
+        {/if}
+        {#if $sequencers < 8}
+            <button 
+                class="sequencers__add"
+                on:click={addSequencer}
+            >
+                + Sequencer
+            </button>
+        {/if}
+    </div>
 </section>
 
 <style lang="scss">
@@ -29,9 +36,23 @@
         flex-direction: column;
         gap: var(--spacer);
 
-        &__add {
+        &__buttons {
+            display: flex;
+            gap: var(--spacer);
+        }
+
+        &__add, &__remove {
             display: flex;
             justify-content: flex-start;
+            cursor: pointer;
+            border: none;
+            background-color: var(--black-lighter);
+            border-radius: var(--border-radius);
+            padding: calc(var(--spacer) / 2) var(--spacer);
+            color: white;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
         }
     }
 </style>
