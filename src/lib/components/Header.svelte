@@ -1,10 +1,12 @@
 <script lang="ts">
     import { showAbout, showHelp } from '$lib/stores';
     import Button from './Button.svelte';
+    import SVG from './SVG.svelte';
 </script>
 
 <header class="header">
-    <h1>ByteStep</h1>
+    <!-- <h1>ByteStep</h1> -->
+    <SVG type="logo" fill="none" width="13rem" />
     <nav>
         <Button 
             onClick={() => showHelp.update(v => !v)}

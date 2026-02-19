@@ -22,7 +22,7 @@
         onClick={() => showCircuit.update(v => !v)}
         isActive={$showCircuit}
     >
-        <SVG type="piano" width="2rem" />
+        <SVG type="circuit" width="2rem" />
     </Button>
     
     <Button

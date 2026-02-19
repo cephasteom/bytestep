@@ -164,6 +164,7 @@
             {/each}
         </div>
     </aside>
+
     <div class="circuit-designer__circuit">
         {#if svg}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -219,9 +220,10 @@
         &__circuit {
             width: 100%;
         }
-
+        
         &__svg {
             height: 100%;
+            transform: translateY(.5rem);
             &--moving {
                 cursor: grabbing;
                 z-index: 1000;
