@@ -199,6 +199,12 @@
         height: 100%;
         width: calc(100vw - 50px);
         overflow-y: scroll;
+        background-color: var(--black-lighter);
+        border-radius: var(--border-radius);
+        width: 50%;
+        padding: 1rem var(--spacer);
+        overflow: scroll;
+        border: 1.5px solid var(--theme-5);
 
         &__palette {
             display: flex;

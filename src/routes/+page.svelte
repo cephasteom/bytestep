@@ -1,8 +1,12 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+    
     import '/node_modules/normalize.css/normalize.css';
     import '$lib/styles.css';
-    import { onMount } from 'svelte';
+    
     import { loadAllStoreData } from '$lib/stores/localstorage';
+    import { showSequencers } from '$lib/stores/sequencers';
+    import { showCircuit } from '$lib/stores/circuit';
     
     import Transport from '$lib/components/transport/Transport.svelte';
     import Sequencers from '$lib/components/sequencer/Sequencers.svelte';
@@ -10,8 +14,6 @@
     import Sidebar from '$lib/components/Sidebar.svelte';
     import About from '$lib/components/About.svelte';
     import MIDISettings from '$lib/components/MIDISettings.svelte';
-    import { showSequencers } from '$lib/stores/sequencers';
-    import { showCircuit } from '$lib/stores/circuit';
     import Circuit from '$lib/components/circuit/Circuit.svelte';
 
     onMount(loadAllStoreData);
@@ -31,9 +33,7 @@
 
             <div class="app__lower">
                 {#if $showCircuit}
-                    <section class="tmp-circuit">
-                        <Circuit />
-                    </section>
+                    <Circuit />
                 {/if}
                 {#if $showSequencers}
                     <Sequencers />
@@ -44,14 +44,6 @@
 </main>
 
 <style lang="scss">
-    .tmp-circuit {
-        background-color: var(--black-lighter);
-        border-radius: var(--border-radius);
-        width: 50%;
-        padding: 1rem var(--spacer);
-        overflow: scroll;
-        border: 1.5px solid var(--theme-5);
-    }
     main {
         min-height: 100vh;
     }
