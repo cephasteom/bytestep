@@ -65,9 +65,6 @@
         border-radius: 5px;
         font-size: 1.125rem;
         text-transform: uppercase;
-        &:focus {
-            outline: none;
-        }
 
         &:disabled {
             cursor: not-allowed;

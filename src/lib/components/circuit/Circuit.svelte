@@ -15,7 +15,9 @@
     let isMoving: boolean = false;
 
     const getWireIndex = (x: number, y: number) => {
-        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y) / 80), 0, 8);
+        return clamp(Math.floor((
+            y - thisContainer.getBoundingClientRect().y - 28
+        ) / 80), 0, 8);
     }
 
     const getColumnIndex = (x: number) => {
@@ -147,64 +149,75 @@
     class="circuit-designer"
     bind:this={thisContainer}
 >
-    <aside class="circuit-designer__palette">
-        <h2 class="title">Circuit</h2>
-        <div 
-            class="circuit-designer__gates"
-        >
-            {#each $gates as gate, i}
-                <GateButton 
-                    id={i}
-                    symbol={gate.symbol}
-                    mouseover={() => focusedGate = gate}
-                    mouseout={() => focusedGate = null}
-                    dragend={(data: { id: number, x: number, y: number }) => {
-                        const { id, x, y } = data;
-                        handleDragEnd(id, x, y)
-                    }}
-                />
-            {/each}
-        </div>
-    </aside>
+    <header class="circuit-designer__header">
+        <h2>Circuit</h2>
+    </header>
 
-    <div class="circuit-designer__circuit">
-        {#if svg}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="circuit-designer__ui">
+        <aside class="circuit-designer__palette">
             <div 
-                bind:this={thisSvg}
-                class="circuit-designer__svg"
-                class:circuit-designer__svg--moving={isMoving}
-                on:mousedown={handleMouseDown}
-                on:mouseover={handleMouseMove}
-                on:mouseup={handleMouseUp}
-                on:mouseleave={handleMouseUp}
+                class="circuit-designer__gates"
             >
-                {@html svg}
+                {#each $gates as gate, i}
+                    <GateButton 
+                        id={i}
+                        symbol={gate.symbol}
+                        mouseover={() => focusedGate = gate}
+                        mouseout={() => focusedGate = null}
+                        dragend={(data: { id: number, x: number, y: number }) => {
+                            const { id, x, y } = data;
+                            handleDragEnd(id, x, y)
+                        }}
+                    />
+                {/each}
             </div>
-        {/if}
+        </aside>
+
+        <div class="circuit-designer__circuit">
+            {#if svg}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div 
+                    bind:this={thisSvg}
+                    class="circuit-designer__svg"
+                    class:circuit-designer__svg--moving={isMoving}
+                    on:mousedown={handleMouseDown}
+                    on:mouseover={handleMouseMove}
+                    on:mouseup={handleMouseUp}
+                    on:mouseleave={handleMouseUp}
+                >
+                    {@html svg}
+                </div>
+            {/if}
+        </div>
     </div>
+
 </section>
 
 <style lang="scss">
-
-    .title {
-        color: white;
-    }
     .circuit-designer {
         display: flex;
-        gap: 1rem;
-        min-height: 76vh;
-        height: 100%;
-        width: calc(100vw - 50px);
-        overflow-y: scroll;
+        flex-direction: column;
+        gap: var(--spacer);
         background-color: var(--black-lighter);
         border-radius: var(--border-radius);
         width: 50%;
-        padding: 1rem var(--spacer);
-        overflow: scroll;
+        overflow: hidden;
+        padding: 1rem var(--spacer) var(--spacer);
         border: 1.5px solid var(--theme-5);
+
+        &__header h2 {
+            color: white;
+        }
+
+        &__ui {
+            display: flex;
+            gap: var(--spacer);
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+        }
 
         &__palette {
             display: flex;
@@ -213,7 +226,8 @@
         }
 
         &__circuit {
-            width: 100%;
+            height: 100%;
+            overflow: scroll;
         }
 
         &__gates {
@@ -231,12 +245,15 @@
         
         &__svg {
             height: 100%;
-            transform: translateY(.5rem);
             &--moving {
                 cursor: grabbing;
                 z-index: 1000;
             }
         }
+
+        :global(svg.qc-circuit) {
+            transform: translateY(-28px);
+        } 
 
         :global(.qc-circuit line) {
             stroke: white!important;
@@ -254,8 +271,6 @@
             fill: transparent!important;
             stroke: white!important;
         }
-
-        // :global(.qc-circuit ellipse), 
         :global(.qc-circuit rect), 
         :global(.qc-circuit path) {
             fill: var(--black-lighter)!important;
