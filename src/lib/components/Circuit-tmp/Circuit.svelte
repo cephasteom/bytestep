@@ -1,3 +1,5 @@
+<!-- TODO: scroll svg but keep gates constant, fix drag and drop when scrolled and when amending gates -->
+
 <script lang="ts">
     import GateButton from './Gate.svelte';
     import { circuit, gates, updateParams, circuitParams, type Gate } from '$lib/stores/circuit';
@@ -13,7 +15,7 @@
     let isMoving: boolean = false;
 
     const getWireIndex = (x: number, y: number) => {
-        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y - thisContainer.scrollTop) / 80), 0, 8);
+        return clamp(Math.floor((y - thisContainer.getBoundingClientRect().y) / 80), 0, 8);
     }
 
     const getColumnIndex = (x: number) => {

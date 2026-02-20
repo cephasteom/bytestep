@@ -12,7 +12,7 @@
     import MIDISettings from '$lib/components/MIDISettings.svelte';
     import { showSequencers } from '$lib/stores/sequencers';
     import { showCircuit } from '$lib/stores/circuit';
-  import Circuit from '$lib/components/circuit/Circuit.svelte';
+    import Circuit from '$lib/components/Circuit/Circuit.svelte';
 
     onMount(loadAllStoreData);
 </script>
@@ -50,6 +50,7 @@
         width: 50%;
         padding: 1rem var(--spacer);
         overflow: scroll;
+        border: 1.5px solid var(--theme-5);
     }
     main {
         min-height: 100vh;
