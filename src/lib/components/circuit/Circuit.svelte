@@ -1,4 +1,4 @@
-<!-- TODO: scroll svg but keep gates constant, fix drag and drop when scrolled and when amending gates -->
+<!-- TODO: fix drag and drop when scrolled and when amending gates -->
 
 <script lang="ts">
     import GateButton from './Gate.svelte';
