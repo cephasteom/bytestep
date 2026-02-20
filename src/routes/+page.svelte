@@ -12,7 +12,7 @@
     import MIDISettings from '$lib/components/MIDISettings.svelte';
     import { showSequencers } from '$lib/stores/sequencers';
     import { showCircuit } from '$lib/stores/circuit';
-    import Circuit from '$lib/components/Circuit/Circuit.svelte';
+    import Circuit from '$lib/components/circuit/Circuit.svelte';
 
     onMount(loadAllStoreData);
 </script>
