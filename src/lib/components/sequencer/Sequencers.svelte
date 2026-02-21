@@ -14,7 +14,7 @@
                 class="sequencers__remove"
                 on:click={removeLastSequencer}
             >
-                - Sequencer
+                -
             </button>
         {/if}
         {#if $sequencers < 8}
@@ -22,7 +22,7 @@
                 class="sequencers__add"
                 on:click={addSequencer}
             >
-                + Sequencer
+                +
             </button>
         {/if}
     </div>
@@ -38,7 +38,7 @@
 
         &__buttons {
             display: flex;
-            gap: var(--spacer);
+            gap: calc(var(--spacer) / 2);
         }
 
         &__add, &__remove {
