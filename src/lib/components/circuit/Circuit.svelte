@@ -1,4 +1,4 @@
-<!-- TODO: fix drag and drop when scrolled and when amending gates -->
+<!-- TODO: fix drag and drop when scrolled -->
 
 <script lang="ts">
     import GateButton from './Gate.svelte';
@@ -14,16 +14,18 @@
     let isClicked: boolean = false;
     let isMoving: boolean = false;
 
-    const getWireIndex = (x: number, y: number) => {
+    const getWireIndex = (y: number) => {
+        const svg = thisSvg.querySelector('.qc-circuit')
+        const scroll = thisContainer.getBoundingClientRect().y - (svg?.getBoundingClientRect().y || 0);
         return clamp(Math.floor((
-            y - thisContainer.getBoundingClientRect().y - 28
-        ) / 80), 0, 8);
+            y - thisContainer.getBoundingClientRect().y + scroll + 28
+        ) / 80), 0, 16);
     }
 
     const getColumnIndex = (x: number) => {
         const svg = thisSvg.querySelector('svg')?.getBoundingClientRect()
         if(!svg) return -1;
-        return clamp(Math.floor((x - svg.x) / 75), 0, 7);
+        return clamp(Math.floor((x - svg.x) / 75), 0, 24);
     }
 
     const updateSVG = () => {
@@ -45,9 +47,9 @@
         if(!areTouching(pointer, svg)) return;
 
         const gate = $gates[i];
-        const wire = getWireIndex(pointerX, pointerY);
+        const wire = getWireIndex(pointerY);
         const column = getColumnIndex(pointerX);
-        const wires = Array.from({ length: gate.qubits }, (_, i) => clamp(wire + i, 0, 10));
+        const wires = Array.from({ length: gate.qubits }, (_, i) => clamp(wire + i, 0, 16));
         const options = gate.params.length
             ? { params: gate.params.reduce((acc, param) => ({ ...acc, [param.name]: param.default }), {}) }
             : {};
@@ -71,7 +73,7 @@
         selectedGateId = target?.dataset?.id || parent?.dataset.id || '';
         if(!selectedGateId) return;
 
-        const wire = getWireIndex(e.clientX, e.clientY);
+        const wire = getWireIndex(e.clientY);
         const wires = circuit.getGateById(selectedGateId).wires
         const connector = wires.findIndex((w: number) => w === wire);
         selectedGateConnector = connector === -1 ? 0 : connector;
@@ -91,7 +93,7 @@
         
         const gate = circuit.getGateById(selectedGateId);
         if(!gate) return
-        const wire = getWireIndex(e.clientX, e.clientY - 75)
+        const wire = getWireIndex(e.clientY);
         const column = getColumnIndex(e.clientX - 20);
         
         const wires = gate.wires.map((w: number, i: number) => (i === selectedGateConnector) ? wire : w);
@@ -254,6 +256,10 @@
         :global(svg.qc-circuit) {
             transform: translateY(-28px);
         } 
+
+        :global(.qc-wire-label) {
+            display: none;
+        }
 
         :global(.qc-circuit line) {
             stroke: white!important;
