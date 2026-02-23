@@ -13,6 +13,8 @@ import { persist } from "./localstorage";
 export const showCircuit = writable<boolean>(false)
 showCircuit.subscribe(persist('bs.showCircuit'))
 
+export const showQuantumActions = writable<boolean>(false)
+
 export const circuit = new QuantumCircuit();
 // circuit.load(loadingState)
 circuit.run()

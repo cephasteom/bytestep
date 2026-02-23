@@ -2,10 +2,13 @@
 
 <script lang="ts">
     import GateButton from './Gate.svelte';
-    import { circuit, gates, updateParams, circuitParams, type Gate } from '$lib/stores/circuit';
+    import { circuit, gates, updateParams, circuitParams, type Gate, showQuantumActions } from '$lib/stores/circuit';
     import { onMount } from 'svelte';
     import { areTouching, arraysAreEqual, clamp } from '$lib/utils';
     import { showSequencers } from '$lib/stores/sequencers';
+    import Tooltip from '$lib/components/Tooltip.svelte';
+    import Button from '$lib/components/Button.svelte';
+    import SVG from '$lib/components/SVG.svelte';
 
     let svg: string = "";
     let thisSvg: HTMLDivElement;
@@ -157,6 +160,18 @@
 >
     <header class="circuit-designer__header">
         <h2>Circuit</h2>
+        <Tooltip text="Open quantum actions">
+            <Button
+                onClick={() => showQuantumActions.set(true)}
+                padding={'0'}
+                ariaLabel="Open quantum actions menu"
+            >
+                <SVG
+                    type="magic"
+                    width={'1.25rem'}
+                />
+            </Button>
+        </Tooltip>
     </header>
 
     <div class="circuit-designer__ui">
@@ -212,8 +227,13 @@
         padding: 1rem var(--spacer) var(--spacer);
         border: 1.5px solid var(--theme-5);
 
-        &__header h2 {
-            color: white;
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            & > h2 {
+                color: white;
+            }
         }
 
         &__ui {
