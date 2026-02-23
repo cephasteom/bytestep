@@ -2,14 +2,12 @@
     import { activeSequencer, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
     import { sequencerTs } from '$lib/stores/transport';
     import { data, addNote, removeNote, moveNote, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencers";
-    import { bars, divisions, sequencers } from "$lib/stores/";
+    import { bars, divisions } from "$lib/stores/";
     import Cell from "./Cell.svelte";
     import { onMount } from "svelte";
     import Header from "./SequencerHeader.svelte";
     import Progress from "./SequencerProgress.svelte";
     import Meta from "./SequencerMeta.svelte";
-    import Button from "../Button.svelte";
-    import Tooltip from "../Tooltip.svelte";
 
     export let id: number;
     let currentNote = -1;
@@ -49,6 +47,7 @@
 
     $: collapsed = $activeSequencer !== id;
     $: colour = `var(--theme-${(id % 5) + 1})`;
+    $: minWidth = $bars * $divisions * 40 + "px";
     
     onMount(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -114,6 +113,7 @@
             class="sequencer__grid"
             role="application"
             on:mouseleave={handleMouseLeave}
+            style="min-width: {minWidth};"
         >
             {#each Array($divisions * $bars) as _, divisionIndex}
                 {#each Array(notes) as _, noteIndex}

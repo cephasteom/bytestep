@@ -5,6 +5,7 @@
     import { circuit, gates, updateParams, circuitParams, type Gate } from '$lib/stores/circuit';
     import { onMount } from 'svelte';
     import { areTouching, arraysAreEqual, clamp } from '$lib/utils';
+    import { showSequencers } from '$lib/stores/sequencers';
 
     let svg: string = "";
     let thisSvg: HTMLDivElement;
@@ -140,6 +141,8 @@
     });
 
     let focusedGate: null | Gate = null;
+
+    $: width = $showSequencers ? 40 : 100;
 </script>
 
 <svelte:window on:mouseup={() => {
@@ -150,6 +153,7 @@
 <section 
     class="circuit-designer"
     bind:this={thisContainer}
+    style="width: {width}%;"
 >
     <header class="circuit-designer__header">
         <h2>Circuit</h2>
@@ -204,7 +208,6 @@
         gap: var(--spacer);
         background-color: var(--black-lighter);
         border-radius: var(--border-radius);
-        width: 50%;
         overflow: hidden;
         padding: 1rem var(--spacer) var(--spacer);
         border: 1.5px solid var(--theme-5);

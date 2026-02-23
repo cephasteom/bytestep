@@ -61,9 +61,10 @@
         background-color: transparent;
         color: white;
         padding: 1rem;
-        border: 1px solid white;
+        border: 2px solid white;
         border-radius: 5px;
         font-size: 1.125rem;
+        font-weight: bold;
         text-transform: uppercase;
 
         &:disabled {

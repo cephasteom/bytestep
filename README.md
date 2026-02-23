@@ -1,8 +1,7 @@
 TODO:
 Musts:
 * make some music / sound design
-* overflow scroll on the sequencers...
-* add more sequencers
+* fix the tempo issue
 
 Nice to haves once proven useful:
 * sync to DAW

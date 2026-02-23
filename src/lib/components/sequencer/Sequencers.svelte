@@ -1,10 +1,16 @@
 <script lang="ts">
     import { sequencers } from '$lib/stores/';
+    import { showCircuit } from '$lib/stores/circuit';
     import { addSequencer, removeLastSequencer } from '$lib/stores/sequencers';
     import Sequencer from './Sequencer.svelte';
+
+    $: width = $showCircuit ? 60 : 100;
 </script>
 
-<section class="sequencers">
+<section 
+    class="sequencers"
+    style="width: {width}%;"
+>
     {#each Array($sequencers) as _, key}
         <Sequencer id={key} />
     {/each}
@@ -30,7 +36,6 @@
 
 <style lang="scss">
     .sequencers {
-        width: 100%;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
