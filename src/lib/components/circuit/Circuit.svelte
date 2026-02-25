@@ -160,18 +160,32 @@
 >
     <header class="circuit-designer__header">
         <h2>Circuit</h2>
-        <Tooltip text="Open quantum actions">
-            <Button
-                onClick={() => showQuantumActions.set(true)}
-                padding={'0'}
-                ariaLabel="Open quantum actions menu"
-            >
-                <SVG
-                    type="magic"
-                    width={'1.25rem'}
-                />
-            </Button>
-        </Tooltip>
+        <div class="circuit-designer__header-actions">
+            <Tooltip text="Open quantum configuration menu">
+                <Button
+                    onClick={() => showQuantumActions.set(true)}
+                    padding={'0'}
+                    ariaLabel="Open quantum configuration menu"
+                >
+                    <SVG
+                        type="cog"
+                        width={'1.25rem'}
+                    />
+                </Button>
+            </Tooltip>
+            <Tooltip text="Populate sequencers from circuit">
+                <Button
+                    onClick={() => console.log('Populate sequencers from circuit')}
+                    padding={'0'}
+                    ariaLabel="Populate sequencers from circuit"
+                >
+                    <SVG
+                        type="magic"
+                        width={'1.25rem'}
+                    />
+                </Button>
+            </Tooltip>
+        </div>
     </header>
 
     <div class="circuit-designer__ui">
@@ -233,6 +247,11 @@
             justify-content: space-between;
             & > h2 {
                 color: white;
+            }
+
+            &-actions {
+                display: flex;
+                gap: var(--spacer);
             }
         }
 
