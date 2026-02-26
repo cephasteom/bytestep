@@ -1,11 +1,12 @@
 <!-- TODO: fix drag and drop when scrolled -->
 
 <script lang="ts">
-    import GateButton from './Gate.svelte';
-    import { circuit, gates, updateParams, circuitParams, type Gate, showQuantumActions } from '$lib/stores/circuit';
     import { onMount } from 'svelte';
+    import { circuit, gates, updateParams, circuitParams, type Gate, showQuantumActions } from '$lib/stores/circuit';
     import { areTouching, arraysAreEqual, clamp } from '$lib/utils';
     import { showSequencers } from '$lib/stores/sequencers';
+    import { sonify } from '$lib/stores/sonification';
+    import GateButton from './Gate.svelte';
     import Tooltip from '$lib/components/Tooltip.svelte';
     import Button from '$lib/components/Button.svelte';
     import SVG from '$lib/components/SVG.svelte';
@@ -175,7 +176,7 @@
             </Tooltip>
             <Tooltip text="Populate sequencers from circuit">
                 <Button
-                    onClick={() => console.log('Populate sequencers from circuit')}
+                    onClick={sonify}
                     padding={'0'}
                     ariaLabel="Populate sequencers from circuit"
                 >

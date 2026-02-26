@@ -28,19 +28,19 @@ export type SequencerData = { [sequencerIndex: number]: {
     hasError?: boolean
 } };
 
-export const data = writable<SequencerData>(
-    Array.from({ length: get(sequencers) }).reduce<SequencerData>(
-        (acc, _, s) => ({ 
-            ...acc, 
-            [s]: { 
-                record: false, 
-                muted: false,
-                quantize: true,
-                notes: [],
-                bytebeat: "t"
-            }
-        }), {})
-);
+export const initialData: SequencerData = Array.from({ length: get(sequencers) }).reduce<SequencerData>(
+    (acc, _, s) => ({ 
+        ...acc, 
+        [s]: { 
+            record: false, 
+            muted: false,
+            quantize: true,
+            notes: [],
+            bytebeat: "t"
+        }
+    }), {});
+
+export const data = writable<SequencerData>(initialData);
 data.subscribe(persist('bs.sequencerData'));
 
 export const removeLastSequencer = () => {
