@@ -1,6 +1,6 @@
 <script lang="ts">
     import { sequencers } from '$lib/stores/';
-    import { showCircuit } from '$lib/stores/circuit';
+    import { showCircuit } from '$lib/stores/circuit/circuit';
     import { addSequencer, removeLastSequencer } from '$lib/stores/sequencers';
     import Sequencer from './Sequencer.svelte';
 

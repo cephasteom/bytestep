@@ -3,7 +3,7 @@ import { connections, midiSettingsActive } from "./midi";
 import { activeSequencers, data, globalBytebeat, showSequencers } from "./sequencers";
 import { bpm, isMetronome } from "./transport";
 import { bars, sequencers, timeSignature } from ".";
-import { showCircuit } from "./circuit";
+import { showCircuit } from "./circuit/circuit";
 
 /**
  * Load all store data from localStorage

@@ -2,7 +2,7 @@
 
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { circuit, gates, updateParams, circuitParams, type Gate, showQuantumActions } from '$lib/stores/circuit';
+    import { circuit, gates, updateParams, circuitParams, type Gate, showQuantumActions } from '$lib/stores/circuit/circuit';
     import { areTouching, arraysAreEqual, clamp } from '$lib/utils';
     import { showSequencers } from '$lib/stores/sequencers';
     import { sonify } from '$lib/stores/sonification';

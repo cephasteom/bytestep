@@ -3,7 +3,7 @@
   import SVG from "./SVG.svelte";
   import { openMidiSettings, showMidiSettings } from '$lib/stores/midi';
   import { showSequencers } from "$lib/stores/sequencers";
-  import { showCircuit } from "$lib/stores/circuit";
+  import { showCircuit } from "$lib/stores/circuit/circuit";
 </script>
 
 <aside class="sidebar">

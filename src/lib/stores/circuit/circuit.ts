@@ -7,8 +7,8 @@ import { mapToRange, debounce } from '$lib/utils';
 // @ts-ignore
 import QuantumCircuit from 'quantum-circuit/dist/quantum-circuit.min.js';
 import { WebMidi } from 'webmidi';
-// import { loadingState } from './presets';
-import { persist } from "./localstorage";
+import { preset } from './preset';
+import { persist } from "../localstorage";
 
 export const showCircuit = writable<boolean>(false)
 showCircuit.subscribe(persist('bs.showCircuit'))
@@ -16,7 +16,7 @@ showCircuit.subscribe(persist('bs.showCircuit'))
 export const showQuantumActions = writable<boolean>(false)
 
 export const circuit = new QuantumCircuit();
-// circuit.load(loadingState)
+circuit.load(preset);
 circuit.run()
 
 const symbols: { [key: string]: string } = {

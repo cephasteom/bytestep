@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { probabilities, phases, circuit } from "./circuit";
+import { probabilities, phases, circuit } from "./circuit/circuit";
 import { data, type Note } from "./sequencers";
 import { sequencers, divisions, bars } from "./";
 

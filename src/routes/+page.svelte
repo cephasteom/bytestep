@@ -6,7 +6,7 @@
     
     import { loadAllStoreData } from '$lib/stores/localstorage';
     import { showSequencers } from '$lib/stores/sequencers';
-    import { showCircuit } from '$lib/stores/circuit';
+    import { showCircuit } from '$lib/stores/circuit/circuit';
     
     import Transport from '$lib/components/transport/Transport.svelte';
     import Sequencers from '$lib/components/sequencer/Sequencers.svelte';
@@ -71,7 +71,7 @@
         &__lower {
             display: flex;
             gap: var(--spacer);
-            min-height: calc(100% - 6rem);
+            // min-height: calc(100% - 6rem);
         }
     }
 </style>

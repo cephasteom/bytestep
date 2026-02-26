@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { showQuantumActions } from '$lib/stores/circuit';
+    import { showQuantumActions } from '$lib/stores/circuit/circuit';
     import Dialog from '$lib/components/Dialog.svelte';
 </script>
 
