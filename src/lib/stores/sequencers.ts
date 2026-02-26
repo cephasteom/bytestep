@@ -6,8 +6,8 @@ import { evalBytebeat, isValidBytebeat } from "$lib/utils/bytebeat";
 import { persist } from "./localstorage";
 
 export const notes = 127 - 36;
-export const activeSequencer = writable<number | null>(null);
-activeSequencer.subscribe(persist('bs.activeSequencer'));
+export const activeSequencers = writable<number[]>([]);
+activeSequencers.subscribe(persist('bs.activeSequencers'));
 
 export const showSequencers = writable(true);
 showSequencers.subscribe(persist('bs.showSequencers'));

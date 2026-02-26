@@ -3,7 +3,7 @@
     import Input from '$lib/components/Input.svelte';
     import SVG from '$lib/components/SVG.svelte';
     import { openMidiSettings } from '$lib/stores/midi';
-    import { activeSequencer, data } from '$lib/stores/sequencers';
+    import { activeSequencers, data } from '$lib/stores/sequencers';
     import { 
         clearSequencer, 
         toggleRecord,
@@ -15,9 +15,9 @@
     export let id: number;
     export let colour: string;
 
-    const toggle = () => activeSequencer.update(activeId => activeId === id ? null : id);
+    const toggle = () => activeSequencers.update(activeIds => activeIds.includes(id) ? activeIds.filter(activeId => activeId !== id) : [...activeIds, id]);
 
-    $: collapsed = $activeSequencer !== id;
+    $: collapsed = !$activeSequencers.includes(id);
     $: record = $data[id]?.record || false;
     $: muted = $data[id]?.muted || false;
     $: bytebeat = $data[id]?.bytebeat || "t";

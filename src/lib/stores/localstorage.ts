@@ -1,6 +1,6 @@
 import { WebMidi } from "webmidi";
 import { connections, midiSettingsActive } from "./midi";
-import { activeSequencer, data, globalBytebeat, showSequencers } from "./sequencers";
+import { activeSequencers, data, globalBytebeat, showSequencers } from "./sequencers";
 import { bpm, isMetronome } from "./transport";
 import { bars, sequencers, timeSignature } from ".";
 import { showCircuit } from "./circuit";
@@ -35,7 +35,7 @@ export const loadAllStoreData = () => {
         ...d,
         ...retrieve<any>('bs.sequencerData', {})
     }));
-    activeSequencer.set(retrieve<number | null>('bs.activeSequencer', null));
+    activeSequencers.set(retrieve<number[]>('bs.activeSequencers', []));
 
     // populate transport data
     isMetronome.set(retrieve<boolean>('bs.isMetronome', false));

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeSequencer, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
+    import { activeSequencers, updateNoteAmp, updateNoteDuration } from "$lib/stores/sequencers";
     import { sequencerTs } from '$lib/stores/transport';
     import { data, addNote, removeNote, moveNote, notes, happensWithin, divisionToPosition } from "$lib/stores/sequencers";
     import { bars, divisions } from "$lib/stores/";
@@ -45,7 +45,7 @@
         currentCell = { division: divisionIndex, note: noteIndex };
     };
 
-    $: collapsed = $activeSequencer !== id;
+    $: collapsed = !$activeSequencers.includes(id);
     $: colour = `var(--theme-${(id % 5) + 1})`;
     $: minWidth = $bars * $divisions * 40 + "px";
     
@@ -62,9 +62,9 @@
         window.addEventListener("keydown", handleKeyDown);
 
         let hasScrolled = false;
-        const cancelActiveSequencerSubscription = activeSequencer.subscribe(activeId => {
+        const cancelActiveSequencerSubscription = activeSequencers.subscribe(ids => {
             if (!scrollableDiv || hasScrolled) return;
-            if (activeId !== id) return scrollableDiv.scrollTo({ top: 0 }); // scroll to top when deactivated
+            if (!ids.includes(id)) return scrollableDiv.scrollTo({ top: 0 }); // scroll to top when deactivated
 
             // scroll to highest note when activated
             const highestNote = $data[id].notes.reduce((max, n) => n.note > max ? n.note : max, 0 );
