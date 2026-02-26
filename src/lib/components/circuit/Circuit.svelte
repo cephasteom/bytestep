@@ -117,12 +117,12 @@
         selectedGateId = ''
     }
 
-    const clearCircuit = () => {
-        circuit.clear()
-        circuit.numQubits = 1
-        updateSVG()
-        updateParams()
-    };
+    // const clearCircuit = () => {
+    //     circuit.clear()
+    //     circuit.numQubits = 1
+    //     updateSVG()
+    //     updateParams()
+    // };
 
     onMount(() => {        
         updateSVG()
