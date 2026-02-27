@@ -117,12 +117,12 @@
         selectedGateId = ''
     }
 
-    // const clearCircuit = () => {
-    //     circuit.clear()
-    //     circuit.numQubits = 1
-    //     updateSVG()
-    //     updateParams()
-    // };
+    const clearCircuit = () => {
+        circuit.clear()
+        circuit.numQubits = 1
+        updateSVG()
+        updateParams()
+    };
 
     onMount(() => {        
         updateSVG()
@@ -147,6 +147,9 @@
     let focusedGate: null | Gate = null;
 
     $: width = $showSequencers ? 40 : 100;
+    $: gate = circuit.getGateById(selectedGateId);
+    $: params = $gates.find(g => g.symbol === gate?.name)?.params;
+
 </script>
 
 <svelte:window on:mouseup={() => {
@@ -162,6 +165,18 @@
     <header class="circuit-designer__header">
         <h2>Circuit</h2>
         <div class="circuit-designer__header-actions">
+            <Tooltip text="Clear circuit">
+                <Button
+                    onClick={ clearCircuit }
+                    padding={'0'}
+                    ariaLabel="Clear circuit"
+                >
+                    <SVG 
+                        type="erase" 
+                        width={'1.25rem'}
+                    />
+                </Button>
+            </Tooltip>
             <Tooltip text="Open quantum configuration menu">
                 <Button
                     onClick={() => showQuantumActions.set(true)}
@@ -206,6 +221,38 @@
                         }}
                     />
                 {/each}
+            </div>
+            <div
+                class="circuit-designer__gate-angles"
+            >
+                {#if gate && params?.length}
+                    <p>This gate accepts the following additional parameters:</p>
+                    {#each params as param}
+                        <p>{param.name}: {gate.options?.[param.name] ?? param.default}</p>
+                        <input 
+                            key={param.name}
+                            type="range" 
+                            min={0} 
+                            max={1} 
+                            step={0.01}
+                            value={gate.options?.[param.name] ?? param.default}
+                            on:input={(e) => {
+                                // @ts-ignore
+                                const value = parseFloat(e.target.value);
+                                const { id, column } = gate;
+                                circuit.gates.forEach((gates: any) => {
+                                    if(id !== gates[column]?.id) return;
+                                    gates[column].options.params = {
+                                        ...gates[column].options.params,
+                                        [param.name]: value * Math.PI * (param.name === 'theta' ? 1 : 2)
+                                    }
+                                });
+                                updateSVG();
+                                updateParams(); // why does this reset it?
+                            }}
+                        />
+                    {/each}
+                {/if}
             </div>
         </aside>
 
@@ -260,8 +307,6 @@
             display: flex;
             gap: var(--spacer);
             width: 100%;
-            height: 100%;
-            overflow: scroll;
         }
 
         &__palette {
@@ -277,11 +322,9 @@
 
         &__gates {
             display: flex;
-            flex-direction: column;
             flex-wrap: wrap;
-            width: 100%;
-            gap: 0.5rem;
-            width: 4rem;
+            gap: .5rem;
+            width: 12rem;
         }
 
         &__circuit {
@@ -313,9 +356,9 @@
             fill: white!important;
             stroke: white!important;
             user-select: none;
+            font-size: 1rem;
         }
         :global(.qc-circuit ellipse),
-        :global(.qc-circuit text), 
         :global(.qc-circuit circle) {
             fill: transparent!important;
             stroke: white!important;

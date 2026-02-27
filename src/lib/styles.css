@@ -28,7 +28,6 @@ body {
     flex-direction: column;
     justify-content: center;
     box-sizing: border-box;
-    /* position: fixed; */
     font-family: system-ui, sans-serif;
     background-color: var(--grey);
     width: 100vw;
